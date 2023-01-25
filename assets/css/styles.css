@@ -19,7 +19,7 @@ header {
 }
 
 .container {
-    max-width: 1100px;
+    max-width: 1051px;
     margin: 77px auto;
 }
 
@@ -33,6 +33,7 @@ header {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin-bottom: 77px;
 }
 
 .novoQuizz p {
@@ -57,4 +58,55 @@ header {
     border-radius: 50px;
     margin: 10px 0;
     cursor: pointer;
+}
+
+/******/
+
+.todosQuizzes {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.todosQuizzes .titulo {
+    width: 100%;
+}
+
+.todosQuizzes .titulo h1 {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 23px;
+    color: #000000;
+}
+
+.listaQuizzes {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 12px;
+}
+
+.listaQuizzes li {
+    list-style-type: none;
+    position: relative;
+}
+
+.listaQuizzes li img {
+    width: 340px;
+    height: 181px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(image.png);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.listaQuizzes li p {
+    position: absolute;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 22px;
+    color: #FFFFFF;
+    z-index: 1;
+    bottom: 10px;
+    left: 20px;
 }
