@@ -2,6 +2,9 @@
 
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
@@ -24,6 +27,111 @@ header {
     top: 0px;
 }
 
+header {
+    width: 100%;
+    height: 69px;
+    background: #EC362D;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-weight: 700;
+    font-size: 37px;
+    color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    max-width: 1051px;
+    margin: 77px auto;
+}
+
+.novoQuizz {
+    width: 100%;
+    height: 181px;
+    background-color: #FAFAFA;
+    border: 1px dashed #D5D5D5;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 77px;
+}
+
+.novoQuizz p {
+    font-weight: 400;
+    font-size: 20px;
+    color: #B9B9B9;
+    width: 250px;
+    text-align: center;
+    line-height: 23px;
+    margin: 10px 0;
+}
+
+.novoQuizz button {
+    width: 136px;
+    height: 40px;
+    font-weight: 400;
+    font-size: 21px;
+    line-height: 25px;
+    color: #EC362D;
+    background: #FAFAFA;
+    border: 1px dashed #EC362D;
+    border-radius: 50px;
+    margin: 10px 0;
+    cursor: pointer;
+}
+
+/******/
+
+.todosQuizzes {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.todosQuizzes .titulo {
+    width: 100%;
+}
+
+.todosQuizzes .titulo h1 {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 23px;
+    color: #000000;
+}
+
+.listaQuizzes {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 12px;
+}
+
+.listaQuizzes li {
+    list-style-type: none;
+    position: relative;
+}
+
+.listaQuizzes li img {
+    width: 340px;
+    height: 181px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(image.png);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.listaQuizzes li p {
+    position: absolute;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 22px;
+    color: #FFFFFF;
+    z-index: 1;
+    bottom: 10px;
+    left: 20px;
+}
 /*TELA3*/
 .telaTres {
     background-color: #fafafa;

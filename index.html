@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt_BR">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,10 +12,24 @@
     <script src="./assets/scripts/script.js" defer></script>
     <title>BuzzQuizz</title>
 </head>
+
 <body>
     <header> BuzzQuizz </header>
     <div class="container">
-        <div class="telaTres">
+        <div class="novoQuizz">
+            <p>Você não criou nenhum quizz ainda :(</p>
+            <button>Criar Quizz</button>
+        </div>
+
+        <div class="todosQuizzes">
+            <div class="titulo">
+                <h1>Todos os Quizzes</h1>
+            </div>
+            <ul class="listaQuizzes">
+
+            </ul>
+        </div>
+        <div class="telaTres hidden">
             <div class="basicInfo hidden">
                 <p>Comece pelo começo</p>
                 <div class="inputs">
@@ -93,4 +108,5 @@
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </body>
+
 </html>
