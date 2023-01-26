@@ -31,7 +31,8 @@ function quizzesIniciais() {
         const boxQuizz = `
         <li>
             <img src="${quizzes[i].image}" alt="">
-            <p>${quizzes[i].title}</p>
+            <div class="gradient"><p>${quizzes[i].title}</p></div>
+            
         </li>
         `;
         iniciais.innerHTML += boxQuizz
@@ -176,6 +177,9 @@ const setLvlObj = () => {
             title: lvlTitle,
             image: lvlImgUrl,
             text: lvlDescription,
+            minValue: lvlPercentage,
+            image: lvlImgUrl,
+            text: lvlDescription,
             minValue: lvlPercentage
         })
     }
@@ -231,7 +235,6 @@ const questionsCards = (quizzQuestionsQtt) => {
 
     questionsList = document.querySelectorAll('.question');
 }
-
 const showLevel = (cardLvl) => {
     const clickedCardLvl = cardLvl.parentElement.parentElement;
     const selectedBefore = telaTres.querySelector('.level.openedLvl');
