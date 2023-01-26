@@ -26,7 +26,7 @@ header {
     position: fixed;
     top: 0px;
     right: 0px;
-    z-index: 3;
+    z-index: 10;
 }
 
 header {
@@ -140,8 +140,7 @@ header {
     display: flex;
     justify-content: center;
     width: 100%;
-    padding-top: 126px;
-    padding-bottom: 150px;
+    padding-top: 49px;
 }
 
 .telaTres .inputs {
@@ -233,14 +232,17 @@ header {
     display: flex;
     flex-direction: column;
     width: 600px;
-    height: 825px;
+    height: 74px;
+    overflow: hidden;
     background: #FFFFFF;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
     margin-top: 6%;
+    transition: all .5s;
 }
 
 .question p {
     width: 564px;
+    margin-bottom: 10px;
 }
 
 .doQuestion,
@@ -260,6 +262,8 @@ header {
 
 .doQuestion p {
     margin-top: 28px;
+    display: flex;
+    justify-content: space-between;
 }
 
 .correctAnswer p {
@@ -401,10 +405,19 @@ header {
     line-height: 25px;
     color: #818181;
 }
+
+ion-icon{
+    cursor: pointer;
+}
 .closed{
     width: 601px;
     height: 74px;  
     margin-top: 24px;
+}
+
+.opened{
+    height: 856px;
+    transition: all .9s;
 }
 .closed p{
     display: flex;
@@ -412,6 +425,7 @@ header {
     justify-content: space-between;
 }
 .hidden {
+    opacity: 0;
     display: none;
 }
 .containerTelaDois{
