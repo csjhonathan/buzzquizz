@@ -12,6 +12,10 @@ body {
     background-color: #fafafa;
 }
 
+button {
+    cursor: pointer;
+}
+
 header {
     background-color: #EC362D;
     width: 100%;
@@ -81,7 +85,6 @@ header {
     border: 1px dashed #EC362D;
     border-radius: 50px;
     margin: 10px 0;
-    cursor: pointer;
 }
 
 /******/
@@ -339,7 +342,12 @@ header {
     transition: all .5s;
 }
 
+.level input {
+    margin-bottom: 14px;
+}
+
 .level p {
+    margin-bottom: 24px;
     width: 564px;
     font-style: normal;
     font-weight: 700;
@@ -435,6 +443,11 @@ ion-icon {
 
 .opened {
     height: 856px;
+    transition: all .9s;
+}
+
+.openedLvl {
+    height: 316px;
     transition: all .9s;
 }
 

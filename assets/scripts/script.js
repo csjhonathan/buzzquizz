@@ -52,7 +52,17 @@ let quizzLevelsQtt = basicInfo.querySelector('.quizzLevelsQtt');
 
 //TELA 3.2
 const quizzQuestions = document.querySelector('.telaTres .quizzQuestions');
+const btnGetCreatLvls = quizzQuestions.querySelector('button');
+let questionsList;
 
+//TELA 3.3
+const selectLevel = document.querySelector('.telaTres .selectLevel');
+const lvlCard = selectLevel.querySelector('.level')
+const selectLevelBtn = selectLevel.querySelector('button')
+let lvlList;
+// const btnGetCreatLvls = quizzQuestions.querySelector('button');
+
+const userQuizz = { title: '', image: '', questions: [], levels: [] };
 
 const isBlank = () => {
     if (quizzTitle.value === '' ||
@@ -92,64 +102,149 @@ const isValid = (titulo, imgUrl, questionsQtt, lvlQtt) => {
     basicInfo.classList.add('hidden');
     quizzQuestions.classList.remove('hidden');
 
-    questionsCards(quizzTitle, quizzImgUrl, quizzQuestionsQtt, quizzLevelsQtt);
+    questionsCards(quizzQuestionsQtt);
 
 };
-userQuizz = [];
+
 const creatQuizzObj = () => {
-    userQuizz.push({
-        title: quizzTitle,
-        image: quizzImgUrl,
-        questions: [{
-            title: "Título da pergunta 1",
-            color: "#123456",
+    userQuizz.title = quizzTitle;
+    userQuizz.image = quizzImgUrl;
+
+    const questionsListObj = [];
+    for (let i = 0; i < quizzQuestionsQtt; i++) {
+        const questionTitle = questionsList[i].querySelector('.questionText').value;
+        const questionColor = questionsList[i].querySelector('.questionColor').value;
+        const questionCorrectAnswer = questionsList[i].querySelector('.questionCorrectAnswer').value;
+        const questionCorrectAnswerImg = questionsList[i].querySelector('.questionCorrectAnswerImg').value;
+        const questionWrongAnswerOne = questionsList[i].querySelector('.wrongOne').value;
+        const questionWrongAnswerOneImg = questionsList[i].querySelector('.wrongOneImg').value;
+        const questionWrongAnswerTwo = questionsList[i].querySelector('.wrongTwo').value;
+        const questionWrongAnswerTwoImg = questionsList[i].querySelector('.wrongTwoImg').value;
+        const questionWrongAnswerThree = questionsList[i].querySelector('.wrongThree').value;
+        const questionWrongAnswerThreeImg = questionsList[i].querySelector('.wrongThreeImg').value;
+        const question = {
+            title: questionTitle,
+            color: questionColor,
             answers: [{
-                text: "Texto da resposta 1",
-                image: "https://http.cat/411.jpg",
+                text: questionCorrectAnswer,
+                image: questionCorrectAnswerImg,
                 isCorrectAnswer: true
-            },
-            {
-                text: "Texto da resposta 2",
-                image: "https://http.cat/412.jpg",
+            }, {
+                text: questionWrongAnswerOne,
+                image: questionWrongAnswerOneImg,
                 isCorrectAnswer: false
-            }
-            ]
-        }]
-    })
+            }]
+        }
+        if (questionWrongAnswerTwo !== '' && questionWrongAnswerTwoImg !== '') {
+            question.answers.push({
+                text: questionWrongAnswerTwo,
+                image: questionWrongAnswerTwoImg,
+                isCorrectAnswer: false
+            })
+        }
+        if (questionWrongAnswerThree !== '' && questionWrongAnswerThreeImg !== '') {
+            question.answers.push({
+                text: questionWrongAnswerThree,
+                image: questionWrongAnswerThreeImg,
+                isCorrectAnswer: false
+            })
+        }
+        questionsListObj.push(question)
+    }
+
+    userQuizz.questions = questionsListObj;
+    levelsCards();
 }
-const questionsCards = (quizzTitle, quizzImgUrl, quizzQuestionsQtt, quizzLevelsQtt) => {
+
+
+
+
+
+const setLvlObj = () => {
+    for (let i = 0; i < quizzLevelsQtt; i++) {
+        const lvlTitle = lvlList[i].querySelector('.lvlTitle').value;
+        const lvlPercentage = lvlList[i].querySelector('.lvlPercentage').value;
+        const lvlImgUrl = lvlList[i].querySelector('.lvlImgUrl').value;
+        const lvlDescription = lvlList[i].querySelector('.lvlDescription').value;
+        userQuizz.levels.push({
+            title: lvlTitle,
+            image: lvlImgUrl,
+            text: lvlDescription,
+            minValue: lvlPercentage
+        })
+    }
+
+    setTimeout(sendRequest(), 1000);
+}
+const levelsCards = function () {
+    for (let i = 1; i <= quizzLevelsQtt; i++) {
+
+        selectLevel.querySelector('div').innerHTML += `
+        <div class="level closed">
+        <p>Nível ${i} <ion-icon name="create" onclick = showLevel(this)></ion-icon></p>
+        <input type="text" required placeholder="Título do nível" class='lvlTitle'>
+        <input type="text" required placeholder="% de acerto mínima" class='lvlPercentage'>
+        <input type="text" required placeholder="URL da imagem do nível" class='lvlImgUrl'>
+        <input type="text" required placeholder="Descrição do nível" class='lvlDescription'>
+    </div>`
+    }
+
+    lvlList = document.querySelectorAll('.level');
+}
+const questionsCards = (quizzQuestionsQtt) => {
     for (let i = 1; i <= quizzQuestionsQtt; i++) {
         quizzQuestions.querySelector('div').innerHTML += `
         <div class="question">
         <div class="doQuestion ">
             <p>Pergunta ${i} <ion-icon name="create" onclick="showQuestion(this)"></ion-icon></p>
-            <input type="text" required placeholder="Texto da pergunta">
-            <input type="text" required placeholder="Cor de fundo da pergunta">
+            <input type="text" required placeholder="Texto da pergunta" class='questionText' >
+            <input type="text" required placeholder="Cor de fundo da pergunta" class='questionColor'>
         </div>
         <div class="correctAnswer">
             <p>Resposta correta</p>
-            <input type="text" required placeholder="Resposta correta">
-            <input type="text" required placeholder="URL da imagem">
+            <input type="text" required placeholder="Resposta correta" class='questionCorrectAnswer'>
+            <input type="text" required placeholder="URL da imagem" class='questionCorrectAnswerImg'>
         </div>
         <div class="wrongAnswers">
             <p>Respostas incorretas</p>
             <div class="wrong">
-                <input type="text" required placeholder="Resposta incorreta 1">
-                <input type="text" required placeholder="URL da imagem 1">
+                <input type="text" required placeholder="Resposta incorreta 1" class = 'wrongOne'>
+                <input type="text" required placeholder="URL da imagem 1" class = 'wrongOneImg'>
             </div>
             <div class="wrong">
-                <input type="text" placeholder="Resposta incorreta 2">
-                <input type="text" placeholder="URL da imagem 2">
+                <input type="text" placeholder="Resposta incorreta 2" class = 'wrongTwo'>
+                <input type="text" placeholder="URL da imagem 2" class = 'wrongTwoImg'>
             </div>
             <div class="wrong">
-                <input type="text" placeholder="Resposta incorreta 3">
-                <input type="text" placeholder="URL da imagem 3">
+                <input type="text" placeholder="Resposta incorreta 3" class = 'wrongThree'>
+                <input type="text" placeholder="URL da imagem 3" class = 'wrongThreeImg'>
             </div>
         </div>
     </div>`
     }
-}
 
+    questionsList = document.querySelectorAll('.question');
+}
+const sendRequest = () => {
+    axios
+        .post(url, userQuizz)
+        .then(() => {
+            console.log('deu tudo certo')
+        })
+        .catch(response => {
+            console.log(response)
+            console.log('deu tudo errado')
+        })
+}
+const showLevel = (cardLvl) => {
+    const clickedCardLvl = cardLvl.parentElement.parentElement;
+    const selectedBefore = telaTres.querySelector('.level.openedLvl');
+
+    if (selectedBefore !== null) {
+        selectedBefore.classList.remove('openedLvl');
+    }
+    clickedCardLvl.classList.add('openedLvl');
+}
 const showQuestion = (cardQuestion) => {
     const clickedCardQuestion = cardQuestion.parentElement.parentElement.parentElement;
     const selectedBefore = telaTres.querySelector('.question.opened');
@@ -160,14 +255,18 @@ const showQuestion = (cardQuestion) => {
     clickedCardQuestion.classList.add('opened');
 }
 
-// telaTres.querySelector(".quizzQuestions").addEventListener('click', e =>{
-//     e.target.querySelector('.question.opened').classList.remove('opened');
-// })
 btnGetCreatQuestions.addEventListener('click', inputAnalyzer => {
     isBlank();
 });
-btnCreatQuizz.addEventListener('click', callScreeThree => {
+btnCreatQuizz.addEventListener('click', callScreenThree => {
     newQuizz.classList.add('hidden');
     allQuizzes.classList.add('hidden');
     telaTres.classList.remove('hidden');
 })
+
+btnGetCreatLvls.addEventListener('click', callScreen => {
+    quizzQuestions.classList.add('hidden');
+    selectLevel.classList.remove('hidden');
+    creatQuizzObj();
+})
+selectLevelBtn.addEventListener('click', e => setLvlObj());
