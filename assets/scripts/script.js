@@ -176,8 +176,6 @@ const setLvlObj = () => {
     setTimeout(sendRequest(), 1000);
 }
 const levelsCards = function () {
-    console.log('entrou ncriação de lvl')
-    console.log(quizzLevelsQtt)
     for (let i = 1; i <= quizzLevelsQtt; i++) {
 
         selectLevel.querySelector('div').innerHTML += `
@@ -234,6 +232,7 @@ const sendRequest = () => {
         })
         .catch( response => {
             console.log(response)
+            console.log('deu tudo errado')
         })
 }
 const showLevel = (cardLvl) => {
