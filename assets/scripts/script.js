@@ -35,8 +35,6 @@ function quizzesIniciais() {
         </li>
         `;
         iniciais.innerHTML += boxQuizz
-
-        console.log(quizzes[i].image)
     }
 }
 
@@ -97,7 +95,7 @@ const isValid = (titulo, imgUrl, questionsQtt, lvlQtt) => {
 
 };
 userQuizz = [];
-const creatQuizzObj = () =>{
+const creatQuizzObj = () => {
     userQuizz.push({
         title: quizzTitle,
         image: quizzImgUrl,
@@ -114,12 +112,12 @@ const creatQuizzObj = () =>{
                 image: "https://http.cat/412.jpg",
                 isCorrectAnswer: false
             }
-        ]
-    }]
+            ]
+        }]
     })
 }
 const questionsCards = (quizzTitle, quizzImgUrl, quizzQuestionsQtt, quizzLevelsQtt) => {
-    for(let i = 1 ; i <= quizzQuestionsQtt; i++){
+    for (let i = 1; i <= quizzQuestionsQtt; i++) {
         quizzQuestions.querySelector('div').innerHTML += `
         <div class="question">
         <div class="doQuestion ">
@@ -154,8 +152,8 @@ const questionsCards = (quizzTitle, quizzImgUrl, quizzQuestionsQtt, quizzLevelsQ
 const showQuestion = (cardQuestion) => {
     const clickedCardQuestion = cardQuestion.parentElement.parentElement.parentElement;
     const selectedBefore = telaTres.querySelector('.question.opened');
-    
-    if(selectedBefore!==null){
+
+    if (selectedBefore !== null) {
         selectedBefore.classList.remove('opened');
     }
     clickedCardQuestion.classList.add('opened');
