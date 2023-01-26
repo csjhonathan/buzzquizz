@@ -120,6 +120,7 @@ header {
     bottom: 10px;
     left: 20px;
 }
+
 /*TELA3*/
 .telaTres {
     background-color: #fafafa;
@@ -152,7 +153,7 @@ header {
 
 .telaTres input {
     width: 564px;
-    height: 46px;
+    min-height: 46px;
     background: #FFFFFF;
     border: 1px solid #D1D1D1;
     border-radius: 5px;
@@ -269,6 +270,7 @@ header {
     margin-top: 32px;
     margin-bottom: 32px;
 }
+
 .quizzQuestions button {
     margin-top: 81px;
     width: 354px;
@@ -287,13 +289,14 @@ header {
 /*ESTILIZAÇÕES PARA A TELA 3
     3- DECIDA OS NIVEIS*/
 
-.selectLevel{
+.selectLevel {
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 100%;
 }
-.selectLevel > p{
+
+.selectLevel>p {
     font-weight: 700;
     font-size: 20px;
     line-height: 23px;
@@ -301,24 +304,32 @@ header {
     margin-bottom: 43px;
 }
 
-.level{
-    width: 600px;
-    height: 316px;
-    background: #FFFFFF;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+.level {
     display: flex;
     flex-direction: column;
+    width: 600px;
+    height: 74px;
     align-items: center;
-    justify-content: space-evenly;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    padding-top: 27px;
+    transition: all .5s;
 }
-.level p{
+.level input {
+    margin-bottom: 14px;
+}
+
+.level p {
+    margin-bottom: 24px;
     width: 564px;
     font-style: normal;
     font-weight: 700;
     font-size: 20px;
-    line-height: 23px;  
+    line-height: 23px;
     color: #000000;
 }
+
 .selectLevel button {
     width: 324px;
     height: 54px;
@@ -334,7 +345,7 @@ header {
 /*ESTILIZAÇÕES PARA A TELA 3
     4 - QUIZZ PRONTO*/
 
-.quizzCreated{
+.quizzCreated {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -342,7 +353,7 @@ header {
     width: 600px;
 }
 
-.quizzCreated > p{
+.quizzCreated>p {
     font-weight: 700;
     font-size: 20px;
     line-height: 23px;
@@ -350,9 +361,10 @@ header {
     margin-bottom: 43px;
 }
 
-.photo{
+.photo {
     position: relative;
 }
+
 .photo p {
     display: flex;
     align-items: center;
@@ -366,7 +378,7 @@ header {
     left: 23px
 }
 
-.quizzCreated button:nth-child(2n - 1){
+.quizzCreated button:nth-child(2n - 1) {
     margin-top: 45px;
     margin-bottom: 9px;
     width: 221px;
@@ -380,7 +392,7 @@ header {
     color: #FFF5F4;
 }
 
-.quizzCreated button:nth-child(2n - 2){
+.quizzCreated button:nth-child(2n - 2) {
     width: 221px;
     height: 44px;
     background-color: transparent;
@@ -392,25 +404,32 @@ header {
     color: #818181;
 }
 
-ion-icon{
+ion-icon {
     cursor: pointer;
 }
-.closed{
+
+.closed {
     width: 601px;
-    height: 74px;  
+    height: 74px;
     margin-top: 24px;
 }
 
-.opened{
+.opened {
     height: 856px;
     transition: all .9s;
 }
-.closed p{
+.openedLvl{
+    height: 316px;
+    transition: all .9s;
+}
+.closed p {
     display: flex;
     width: 564px;
     justify-content: space-between;
 }
+
 .hidden {
+    width: 0%;
     opacity: 0;
     display: none;
 }
