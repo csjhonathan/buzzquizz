@@ -39,7 +39,9 @@ function quizzesIniciais() {
 }
 
 //FUNÇÕES E VARIAVEIS DA TELA 3 =======================================================
+const telaUm = document.querySelector('.telaUm')
 const telaTres = document.querySelector('.telaTres');
+const telaDois = document.querySelector('.telaDois');
 
 //TELA 3.1
 const basicInfo = document.querySelector('.telaTres .basicInfo');
@@ -59,50 +61,59 @@ const selectLevel = document.querySelector('.telaTres .selectLevel');
 const lvlCard = selectLevel.querySelector('.level')
 const selectLevelBtn = selectLevel.querySelector('button')
 let lvlList;
-// const btnGetCreatLvls = quizzQuestions.querySelector('button');
+
+//TELA 3.4
+const quizzCreated = document.querySelector('.telaTres .quizzCreated');
+const btnAccessQuizz = quizzCreated.querySelector('.accessQuizz');
+const btnGoToHome = quizzCreated.querySelector('.goToHome');
 
 const userQuizz = { title: '', image: '', questions: [], levels: [] };
 
 const isBlank = () => {
-    if (quizzTitle.value === '' ||
-        quizzImgUrl.value === '' ||
-        quizzQuestionsQtt.value === '' ||
-        quizzLevelsQtt.value === '') {
-        alert('Preencha todos os campos')
-        return
-    }
+    // if (quizzTitle.value === '' ||
+    //     quizzImgUrl.value === '' ||
+    //     quizzQuestionsQtt.value === '' ||
+    //     quizzLevelsQtt.value === '') {
+    //     alert('Preencha todos os campos')
+    //     return
+    // }
     isValid(quizzTitle.value, quizzImgUrl.value, quizzQuestionsQtt.value, quizzLevelsQtt.value);
 }
 
 const isValid = (titulo, imgUrl, questionsQtt, lvlQtt) => {
 
-    if (titulo.length < 20 || titulo.length > 65) {
-        alert('Titulo com tamanho invalido');
-        return
-    }
-    if (!imgUrl.includes('https') && !imgUrl.includes('http')) {
-        alert('Insira uma url válida');
-        return
-    }
-    if (!Number(questionsQtt) || Number(questionsQtt) < 3) {
-        alert('Quantidade de perguntas inválida (pelo menos 3)')
-        return
-    }
-    if (!Number(lvlQtt) || Number(lvlQtt) < 2) {
-        alert('Quantidade de níveis inválida (pelo menos 2)')
-        return
-    }
+    // if (titulo.length < 20 || titulo.length > 65) {
+    //     alert('Titulo com tamanho invalido');
+    //     return
+    // }
+    // if(imgUrl.includes('https://') || imgUrl.includes('http://')){
+    //     if(imgUrl.includes('.jpg') || imgUrl.includes('.jpeg') || imgUrl.includes('.png') || imgUrl.includes('.webp')){
+    //     }else{
+    //         alert('insira uma URL válida para sua imagem')
+    //         return
+    //     }
+    // } else {
+    //     alert('insira uma URL válida para sua imagem')
+    //     return
+    // }
+    // if (!Number(questionsQtt) || Number(questionsQtt) < 3) {
+    //     alert('Quantidade de perguntas inválida (pelo menos 3)')
+    //     return
+    // }
+    // if (!Number(lvlQtt) || Number(lvlQtt) < 2) {
+    //     alert('Quantidade de níveis inválida (pelo menos 2)')
+    //     return
+    // }
 
-    quizzTitle = titulo;
-    quizzImgUrl = imgUrl;
-    quizzQuestionsQtt = questionsQtt;
-    quizzLevelsQtt = lvlQtt;
+    // quizzTitle = titulo;
+    // quizzImgUrl = imgUrl;
+    // quizzQuestionsQtt = questionsQtt;
+    // quizzLevelsQtt = lvlQtt;
 
     basicInfo.classList.add('hidden');
     quizzQuestions.classList.remove('hidden');
 
     questionsCards(quizzQuestionsQtt);
-
 };
 
 const creatQuizzObj = () => {
@@ -155,10 +166,6 @@ const creatQuizzObj = () => {
     levelsCards();
 }
 
-
-
-
-
 const setLvlObj = () => {
     for (let i = 0; i < quizzLevelsQtt; i++) {
         const lvlTitle = lvlList[i].querySelector('.lvlTitle').value;
@@ -167,9 +174,9 @@ const setLvlObj = () => {
         const lvlDescription = lvlList[i].querySelector('.lvlDescription').value;
         userQuizz.levels.push({
             title: lvlTitle,
-			image: lvlImgUrl,
-			text: lvlDescription,
-			minValue: lvlPercentage
+            image: lvlImgUrl,
+            text: lvlDescription,
+            minValue: lvlPercentage
         })
     }
 
@@ -224,17 +231,7 @@ const questionsCards = (quizzQuestionsQtt) => {
 
     questionsList = document.querySelectorAll('.question');
 }
-const sendRequest = () => {
-    axios
-        .post(url, userQuizz)
-        .then(() => {
-            console.log('deu tudo certo')
-        })
-        .catch( response => {
-            console.log(response)
-            console.log('deu tudo errado')
-        })
-}
+
 const showLevel = (cardLvl) => {
     const clickedCardLvl = cardLvl.parentElement.parentElement;
     const selectedBefore = telaTres.querySelector('.level.openedLvl');
@@ -254,18 +251,119 @@ const showQuestion = (cardQuestion) => {
     clickedCardQuestion.classList.add('opened');
 }
 
-btnGetCreatQuestions.addEventListener('click', inputAnalyzer => {
+let successUserQuizz;
+let failedUserQuizz;
+const quizzTeste = {
+	title: "TESTETESTETEJSTETESTETESTE",
+	image: "https://http.cat/411.jpg",
+	questions: [
+		{
+			title: "Título da pergunta 1",
+			color: "#123456",
+			answers: [
+				{
+					text: "Texto da resposta 1",
+					image: "https://http.cat/411.jpg",
+					isCorrectAnswer: true
+				},
+				{
+					text: "Texto da resposta 2",
+					image: "https://http.cat/412.jpg",
+					isCorrectAnswer: false
+				}
+			]
+		},
+		{
+			title: "Título da pergunta 2",
+			color: "#123456",
+			answers: [
+				{
+					text: "Texto da resposta 1",
+					image: "https://http.cat/411.jpg",
+					isCorrectAnswer: true
+				},
+				{
+					text: "Texto da resposta 2",
+					image: "https://http.cat/412.jpg",
+					isCorrectAnswer: false
+				}
+			]
+		},
+		{
+			title: "Título da pergunta 3",
+			color: "#123456",
+			answers: [
+				{
+					text: "Texto da resposta 1",
+					image: "https://http.cat/411.jpg",
+					isCorrectAnswer: true
+				},
+				{
+					text: "Texto da resposta 2",
+					image: "https://http.cat/412.jpg",
+					isCorrectAnswer: false
+				}
+			]
+		}
+	],
+	levels: [
+		{
+			title: "Título do nível 1",
+			image: "https://http.cat/411.jpg",
+			text: "Descrição do nível 1",
+			minValue: 0
+		},
+		{
+			title: "Título do nível 2",
+			image: "https://http.cat/412.jpg",
+			text: "Descrição do nível 2",
+			minValue: 50
+		}
+	]
+}
+const sendRequest = () => {
+    axios
+        .post(url, quizzTeste)
+        .then(response => {
+            console.log('deu tudo certo');
+            console.log(response);
+            successUserQuizz = response;
+            createdQuizzScreen();
+        })
+        .catch(response => {
+            console.log(response);
+            console.log('deu tudo errado');
+            failedUserQuizz = response;
+        })
+}
+const createdQuizzScreen = () => {
+    selectLevel.classList.add('hidden');
+    quizzCreated.classList.remove('hidden');
+    quizzCreated.querySelector('.photo').innerHTML = `
+    <img src="${quizzTeste.image}" alt="">
+    <p>${quizzTeste.title}</p>
+    `
+}
+
+
+//EVENT LISTENERS
+btnCreatQuizz.addEventListener('click', () => {
+    telaUm.classList.add('hidden');
+    telaTres.classList.remove('hidden');
+});
+btnGetCreatQuestions.addEventListener('click', () => {
     isBlank();
 });
-btnCreatQuizz.addEventListener('click', callScreenThree => {
-    newQuizz.classList.add('hidden');
-    allQuizzes.classList.add('hidden');
-    telaTres.classList.remove('hidden');
-})
 
-btnGetCreatLvls.addEventListener('click', callScreen => {
+btnGetCreatLvls.addEventListener('click', () => {
     quizzQuestions.classList.add('hidden');
     selectLevel.classList.remove('hidden');
     creatQuizzObj();
 })
 selectLevelBtn.addEventListener('click', e => setLvlObj());
+
+btnGoToHome.addEventListener('click', e => window.location.reload())
+btnAccessQuizz.addEventListener('click', e => {
+    telaTres.classList.add('hidden')
+    telaDois.classList.remove('hidden');
+})

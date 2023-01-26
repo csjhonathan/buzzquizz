@@ -29,26 +29,22 @@ header {
     z-index: 10;
 }
 
-header {
+.container {
     width: 100%;
-    height: 69px;
-    background: #EC362D;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    font-weight: 700;
-    font-size: 37px;
-    color: #FFFFFF;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin: 69px auto;
+    background-color: #fafafa;
 }
 
-.container {
-    max-width: 1051px;
-    margin: 77px auto;
+/******/
+.telaUm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 69px;
 }
 
 .novoQuizz {
-    width: 100%;
+    min-width: 1080px;
     height: 181px;
     background-color: #FAFAFA;
     border: 1px dashed #D5D5D5;
@@ -84,16 +80,8 @@ header {
     cursor: pointer;
 }
 
-/******/
-
-.todosQuizzes {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-}
-
 .todosQuizzes .titulo {
-    width: 100%;
+    text-align: left;
 }
 
 .todosQuizzes .titulo h1 {
@@ -104,14 +92,18 @@ header {
 }
 
 .listaQuizzes {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(3, 2fr);
+    gap: 15px;
     margin-top: 12px;
 }
 
 .listaQuizzes li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 350px;
+    height: 190px;
     list-style-type: none;
     position: relative;
 }
@@ -194,7 +186,6 @@ header {
     font-size: 23px;
     line-height: 27px;
     color: #000000;
-    margin-top: 5.5%;
 }
 
 .basicInfo button {
@@ -330,6 +321,7 @@ header {
     padding-top: 27px;
     transition: all .5s;
 }
+
 .level input {
     margin-bottom: 14px;
 }
@@ -356,6 +348,7 @@ header {
     border: none;
     margin-top: 75px;
 }
+
 /*ESTILIZAÇÕES PARA A TELA 3
     4 - QUIZZ PRONTO*/
 
@@ -377,6 +370,11 @@ header {
 
 .photo {
     position: relative;
+}
+
+.photo img {
+    width: 500px;
+    height: 266px;
 }
 
 .photo p {
@@ -432,10 +430,12 @@ ion-icon {
     height: 856px;
     transition: all .9s;
 }
-.openedLvl{
+
+.openedLvl {
     height: 316px;
     transition: all .9s;
 }
+
 .closed p {
     display: flex;
     width: 564px;
@@ -447,29 +447,33 @@ ion-icon {
     opacity: 0;
     display: none;
 }
-.containerTelaDois{
-    margin-top: 69px;
-}
 
 /* Estilização Tela 2*/
-.topo{
+
+.telaDois {
+    width: 100%;
+}
+
+.topo {
     position: relative;
     width: 100%;
     height: 227px;
 }
-.topo img{
+
+.topo img {
     width: 100%;
     height: 227px;
     object-fit: cover;
 }
-.topo div{
+
+.topo div {
     position: absolute;
     top: 0px;
-    right:0px;
+    right: 0px;
     z-index: 1;
     width: 100%;
     height: 227px;
-    background: linear-gradient(rgba(0,0,0,0.40),rgba(0,0,0,0.40));
+    background: linear-gradient(rgba(0, 0, 0, 0.40), rgba(0, 0, 0, 0.40));
     color: #FFFFFF;
     font-size: 39px;
     font-weight: 400;
@@ -478,10 +482,12 @@ ion-icon {
     align-items: center;
     justify-content: center;
 }
-.caixote{
+
+.caixote {
     margin-bottom: 100px;
 }
-.perguntas{
+
+.perguntas {
     width: 760px;
     height: auto;
     background-color: #FFFFFF;
@@ -493,7 +499,8 @@ ion-icon {
     padding-top: 25px;
 
 }
-.pergunta{
+
+.pergunta {
     background-color: #434CA0;
     width: 100%;
     height: 140px;
@@ -505,20 +512,22 @@ ion-icon {
     line-height: 27px;
     color: #FFFFFF;
 }
-ul{
+
+.telaDois ul {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px 30px;
     margin-top: 20px;
 }
-.perguntas li img{
+
+.perguntas li img {
     width: 330px;
     height: 175px;
     object-fit: cover;
 }
 
-.perguntas li .opcao{
+.perguntas li .opcao {
     width: 330px;
     word-wrap: wrap;
     font-size: 20px;
@@ -526,5 +535,3 @@ ul{
     line-height: 23px;
     color: #000000;
 }
-
-
