@@ -31,7 +31,8 @@ function quizzesIniciais() {
         const boxQuizz = `
         <li>
             <img src="${quizzes[i].image}" alt="">
-            <p>${quizzes[i].title}</p>
+            <div class="gradient"><p>${quizzes[i].title}</p></div>
+            
         </li>
         `;
         iniciais.innerHTML += boxQuizz
