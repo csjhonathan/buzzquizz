@@ -1,18 +1,112 @@
-const url = 'https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes';
-const btnCreatQuizz = document.querySelector('.novoQuizz button'); //<== botão de criar quizz
+const url = 'https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/';
 const container = document.querySelector('.container');
 const newQuizz = container.querySelector('.novoQuizz');
 const allQuizzes = container.querySelector('.todosQuizzes');
+const quizzTeste = {
+    title: "TESTETESTETEJSTETESTETESTE",
+    image: "https://http.cat/411.jpg",
+    questions: [
+        {
+            title: "Título da pergunta 1",
+            color: "#123456",
+            answers: [
+                {
+                    text: "Texto da resposta 1",
+                    image: "https://http.cat/411.jpg",
+                    isCorrectAnswer: true
+                },
+                {
+                    text: "Texto da resposta 2",
+                    image: "https://http.cat/412.jpg",
+                    isCorrectAnswer: false
+                }
+            ]
+        },
+        {
+            title: "Título da pergunta 2",
+            color: "#123456",
+            answers: [
+                {
+                    text: "Texto da resposta 1",
+                    image: "https://http.cat/411.jpg",
+                    isCorrectAnswer: true
+                },
+                {
+                    text: "Texto da resposta 2",
+                    image: "https://http.cat/412.jpg",
+                    isCorrectAnswer: false
+                }
+            ]
+        },
+        {
+            title: "Título da pergunta 3",
+            color: "#123456",
+            answers: [
+                {
+                    text: "Texto da resposta 1",
+                    image: "https://http.cat/411.jpg",
+                    isCorrectAnswer: true
+                },
+                {
+                    text: "Texto da resposta 2",
+                    image: "https://http.cat/412.jpg",
+                    isCorrectAnswer: false
+                }
+            ]
+        }
+    ],
+    levels: [
+        {
+            title: "Título do nível 1",
+            image: "https://http.cat/411.jpg",
+            text: "Descrição do nível 1",
+            minValue: 0
+        },
+        {
+            title: "Título do nível 2",
+            image: "https://http.cat/412.jpg",
+            text: "Descrição do nível 2",
+            minValue: 50
+        }
+    ]
+}
 
-
+//VARIAVEIS DA TELA 3
+let lvlList = '';
+let lvlNodeList;
 let quizzes = [];
-
+let questionsList = '';
+let questionsNodeList;
+let quizzTitle;
+let quizzImgUrl;
+let quizzQuestionsQtt;
+let quizzLevelsQtt;
+let successUserQuizz;
+let failedUserQuizz;
+//================================
 todosQuizzes();
+
 
 function todosQuizzes() {
     const promisse = axios.get(url);
 
     promisse.then((resposta) => {
+        container.innerHTML = `
+        <div class="telaUm ">
+        <div class="novoQuizz">
+            <p>Você não criou nenhum quizz ainda :(</p>
+            <button onclick = 'goTocreatQuizz()'>Criar Quizz</button>
+        </div>
+
+        <div class="todosQuizzes">
+            <div class="titulo">
+                <h1>Todos os Quizzes</h1>
+            </div>
+            <ul class="listaQuizzes">
+
+            </ul>
+        </div>
+    </div>`
         quizzes = resposta.data;
         quizzesIniciais();
     })
@@ -21,15 +115,16 @@ function todosQuizzes() {
         alert("Algo inesperado aconteceu, a pagina sera reiniciada")
         window.location.reload(true)
     })
-}
 
+
+}
 function quizzesIniciais() {
     const iniciais = document.querySelector('.listaQuizzes');
     iniciais.innerHTML = ''
 
     for (let i = 0; i < 6; i++) {
         const boxQuizz = `
-        <li>
+        <li onclick = openQuizz(this) data-id = '${quizzes[i].id}' >
             <img src="${quizzes[i].image}" alt="">
             <div class="gradient"><p>${quizzes[i].title}</p></div>
             
@@ -38,125 +133,218 @@ function quizzesIniciais() {
         iniciais.innerHTML += boxQuizz
     }
 }
+const openQuizz = (quizz) => {
+    const quizzId = quizz.getAttribute('data-id');
 
-//FUNÇÕES E VARIAVEIS DA TELA 3 =======================================================
+    axios
+        .get(url + quizzId)
+        .then(response => {
+            showQuizz(response)
+        })
+        .catch(response => {
+            alert('erro ao abrir quizz')
+        })
+}
+const showQuizz = receivedQuizz => {
+    const quizzData = receivedQuizz.data;
+    container.innerHTML = `<div class="telaDois">
+    <div class="topo">
+        <img src="${quizzData.image}" alt="Imagem Não Encontrada" class="quizzHeader">
+        <div></div>
+        <div><span>${quizzData.title}</span></div>
+    </div>
+    <div class="questionBox">${getQuestionTemplate(quizzData)}</div>`
+
+
+
+}
+
+function getQuestionTemplate(quizzData) {
+    let questionsTemplate = '';
+    const quizzQuestions = quizzData.questions;
+    for (let i = 0; i < quizzQuestions.length; i++) {
+        questionsTemplate += `
+        <div class="perguntas">
+            <div class="pergunta" style = "background-color: ${quizzQuestions[i].color}">
+                ${quizzQuestions[i].title}
+            </div>
+            <ul class="respostas">${getAnswers(quizzQuestions[i].answers, [i])}</ul>
+        </div>`
+}
+
+    return questionsTemplate;
+}
+function getAnswers(quizzAnswers){
+    let answersTemplate= '';
+    for(let i = 0; i < quizzAnswers.length; i++){
+        console.log(quizzAnswers[i], i)
+
+        answersTemplate += `
+            <li data-iscorrect = '${quizzAnswers[i].isCorrectAnswer}' >
+                <img src="${quizzAnswers[i].image}" alt="Imagem Não Encontrada">
+                <div class="opcao">${quizzAnswers[i].text}</div>
+            </li>` 
+        
+    }
+    return answersTemplate;
+}
+//FUNÇÕES 3 =======================================================
 const telaUm = document.querySelector('.telaUm')
 const telaTres = document.querySelector('.telaTres');
 const telaDois = document.querySelector('.telaDois');
 
 //TELA 3.1
-const basicInfo = document.querySelector('.telaTres .basicInfo');
-const btnGetCreatQuestions = basicInfo.querySelector('button');
-let quizzTitle = basicInfo.querySelector('.quizzTitle');
-let quizzImgUrl = basicInfo.querySelector('.quizzImgUrl');
-let quizzQuestionsQtt = basicInfo.querySelector('.quizzQuestionsQtt');
-let quizzLevelsQtt = basicInfo.querySelector('.quizzLevelsQtt');
+const basicInfo = document.querySelector('.basicInfo');
 
 //TELA 3.2
 const quizzQuestions = document.querySelector('.telaTres .quizzQuestions');
-const btnGetCreatLvls = quizzQuestions.querySelector('button');
-let questionsList;
+
 
 //TELA 3.3
 const selectLevel = document.querySelector('.telaTres .selectLevel');
-const lvlCard = selectLevel.querySelector('.level')
-const selectLevelBtn = selectLevel.querySelector('button')
-let lvlList;
+
 
 //TELA 3.4
 const quizzCreated = document.querySelector('.telaTres .quizzCreated');
-const btnAccessQuizz = quizzCreated.querySelector('.accessQuizz');
-const btnGoToHome = quizzCreated.querySelector('.goToHome');
 
 const userQuizz = { title: '', image: '', questions: [], levels: [] };
 
-const isBlank = () => {
-    // if (quizzTitle.value === '' ||
-    //     quizzImgUrl.value === '' ||
-    //     quizzQuestionsQtt.value === '' ||
-    //     quizzLevelsQtt.value === '') {
-    //     alert('Preencha todos os campos')
-    //     return
-    // }
-    isValid(quizzTitle.value, quizzImgUrl.value, quizzQuestionsQtt.value, quizzLevelsQtt.value);
+function goTocreatQuizz() {
+    container.innerHTML = `
+    <div class="telaTres">
+            <div class="basicInfo">
+                <p>Comece pelo começo</p>
+                <div class="inputs">
+                    <input type="text" placeholder="Título do seu quizz" required class="quizzTitle">
+                    <input type="text" placeholder="URL da imagem do seu quizz" required class="quizzImgUrl">
+                    <input type="text" placeholder="Quantidade de perguntas do quizz" required class="quizzQuestionsQtt">
+                    <input type="text" placeholder="Quantidade de níveis do quizz" required class="quizzLevelsQtt">
+                </div>
+                <button onclick = goToCreatQuestions()>Prosseguir pra criar perguntas</button>
+            </div>
+        </div>`
+
+    quizzTitle = document.querySelector('.quizzTitle');
+    quizzImgUrl = document.querySelector('.quizzImgUrl');
+    quizzQuestionsQtt = document.querySelector('.quizzQuestionsQtt');
+    quizzLevelsQtt = document.querySelector('.quizzLevelsQtt');
 }
 
-const isValid = (titulo, imgUrl, questionsQtt, lvlQtt) => {
+function goToCreatQuestions() {
+    if (isBlank() === false) {
+        return
+    } else if (isValid(quizzTitle.value, quizzImgUrl.value, quizzQuestionsQtt.value, quizzLevelsQtt.value) === false) {
+        return
+    }
 
-    // if (titulo.length < 20 || titulo.length > 65) {
-    //     alert('Titulo com tamanho invalido');
-    //     return
-    // }
-    // if(imgUrl.includes('https://') || imgUrl.includes('http://')){
-    //     if(imgUrl.includes('.jpg') || imgUrl.includes('.jpeg') || imgUrl.includes('.png') || imgUrl.includes('.webp')){
-    //     }else{
-    //         alert('insira uma URL válida para sua imagem')
-    //         return
-    //     }
-    // } else {
-    //     alert('insira uma URL válida para sua imagem')
-    //     return
-    // }
-    // if (!Number(questionsQtt) || Number(questionsQtt) < 3) {
-    //     alert('Quantidade de perguntas inválida (pelo menos 3)')
-    //     return
-    // }
-    // if (!Number(lvlQtt) || Number(lvlQtt) < 2) {
-    //     alert('Quantidade de níveis inválida (pelo menos 2)')
-    //     return
-    // }
+    container.querySelector('.telaTres').innerHTML = `
+    <div class="quizzQuestions">
+    <p>Crie suas perguntas</p>
+    <div>${questionsCards(quizzQuestionsQtt)}</div>
+    <button onclick = 'goToCreatLevels()'>Prosseguir pra criar níveis</button>
+    </div>
+    `
+}
 
-    // quizzTitle = titulo;
-    // quizzImgUrl = imgUrl;
-    // quizzQuestionsQtt = questionsQtt;
-    // quizzLevelsQtt = lvlQtt;
+function goToCreatLevels() {
+    creatQuizzObj();
+    container.querySelector('.telaTres').innerHTML = `
+    <div class="selectLevel">
+    <p>Agora, decida os níveis </ion-icon></p>
+    <div class="levels">${levelsCards(quizzLevelsQtt)}</div>
+    <button onclick = 'goToquizzCreated()'>Finalizar Quizz</button>
+    </div>`
+    lvlNodeList = document.querySelectorAll('.level');
+}
 
-    basicInfo.classList.add('hidden');
-    quizzQuestions.classList.remove('hidden');
+function goToquizzCreated() {
+    setLvlObj();
+    container.querySelector('.telaTres').innerHTML = `
+    <div class="quizzCreated">
+        <p>Seu quizz está pronto!</p>
+        <div class="photo">
+            <img src="${quizzTeste.image}" alt="">
+            <p>${quizzTeste.title}</p>
+        </div>
+        <button onclick = 'accessQuizz()'> Acessar Quizz</button>
+        <button onclick = 'goToHome()'> Voltar pra home</button>
+    </div>`
+}
 
-    questionsCards(quizzQuestionsQtt);
-};
+function isBlank() {
+    if (quizzTitle.value === '' ||
+        quizzImgUrl.value === '' ||
+        quizzQuestionsQtt.value === '' ||
+        quizzLevelsQtt.value === '') {
+        alert('Preencha todos os campos')
+        return false
+    }
 
-const creatQuizzObj = () => {
+}
+
+function isValid(titulo, imgUrl, questionsQtt, lvlQtt) {
+
+    if (titulo.length < 20 || titulo.length > 65) {
+        alert('Titulo com tamanho invalido');
+        return false
+    }
+    if(imgUrl.includes('https://') || imgUrl.includes('http://')){
+        if(imgUrl.includes('.jpg') || imgUrl.includes('.jpeg') || imgUrl.includes('.png') || imgUrl.includes('.webp')){
+        }else{
+            alert('insira uma URL válida para sua imagem')
+            return false
+        }
+    } else {
+        alert('insira uma URL válida para sua imagem')
+        return false
+    }
+    if (!Number(questionsQtt) || Number(questionsQtt) < 3) {
+        alert('Quantidade de perguntas inválida (pelo menos 3)')
+        return false
+    }
+    if (!Number(lvlQtt) || Number(lvlQtt) < 2) {
+        alert('Quantidade de níveis inválida (pelo menos 2)')
+        return false
+    }
+
+    quizzTitle = titulo;
+    quizzImgUrl = imgUrl;
+    quizzQuestionsQtt = questionsQtt;
+    quizzLevelsQtt = lvlQtt;
+
+}
+
+function creatQuizzObj() {
+    questionsNodeList = document.querySelectorAll('.question');
     userQuizz.title = quizzTitle;
     userQuizz.image = quizzImgUrl;
 
     const questionsListObj = [];
     for (let i = 0; i < quizzQuestionsQtt; i++) {
-        const questionTitle = questionsList[i].querySelector('.questionText').value;
-        const questionColor = questionsList[i].querySelector('.questionColor').value;
-        const questionCorrectAnswer = questionsList[i].querySelector('.questionCorrectAnswer').value;
-        const questionCorrectAnswerImg = questionsList[i].querySelector('.questionCorrectAnswerImg').value;
-        const questionWrongAnswerOne = questionsList[i].querySelector('.wrongOne').value;
-        const questionWrongAnswerOneImg = questionsList[i].querySelector('.wrongOneImg').value;
-        const questionWrongAnswerTwo = questionsList[i].querySelector('.wrongTwo').value;
-        const questionWrongAnswerTwoImg = questionsList[i].querySelector('.wrongTwoImg').value;
-        const questionWrongAnswerThree = questionsList[i].querySelector('.wrongThree').value;
-        const questionWrongAnswerThreeImg = questionsList[i].querySelector('.wrongThreeImg').value;
         const question = {
-            title: questionTitle,
-            color: questionColor,
+            title: questionsNodeList[i].querySelector('.questionText').value,
+            color: questionsNodeList[i].querySelector('.questionColor').value,
             answers: [{
-                text: questionCorrectAnswer,
-                image: questionCorrectAnswerImg,
+                text: questionsNodeList[i].querySelector('.questionCorrectAnswer').value,
+                image: questionsNodeList[i].querySelector('.questionCorrectAnswerImg').value,
                 isCorrectAnswer: true
             }, {
-                text: questionWrongAnswerOne,
-                image: questionWrongAnswerOneImg,
+                text: questionsNodeList[i].querySelector('.wrongOne').value,
+                image: questionsNodeList[i].querySelector('.wrongOneImg').value,
                 isCorrectAnswer: false
             }]
         }
-        if (questionWrongAnswerTwo !== '' && questionWrongAnswerTwoImg !== '') {
+        if (questionsNodeList[i].querySelector('.wrongTwo').value !== '' && questionsNodeList[i].querySelector('.wrongTwoImg').value !== '') {
             question.answers.push({
-                text: questionWrongAnswerTwo,
-                image: questionWrongAnswerTwoImg,
+                text: questionsNodeList[i].querySelector('.wrongTwo').value,
+                image: questionsNodeList[i].querySelector('.wrongTwoImg').value,
                 isCorrectAnswer: false
             })
         }
-        if (questionWrongAnswerThree !== '' && questionWrongAnswerThreeImg !== '') {
+        if (questionsNodeList[i].querySelector('.wrongThree').value !== '' && questionsNodeList[i].querySelector('.wrongThreeImg').value !== '') {
             question.answers.push({
-                text: questionWrongAnswerThree,
-                image: questionWrongAnswerThreeImg,
+                text: questionsNodeList[i].querySelector('.wrongThree').value,
+                image: questionsNodeList[i].querySelector('.wrongThreeImg').value,
                 isCorrectAnswer: false
             })
         }
@@ -164,32 +352,23 @@ const creatQuizzObj = () => {
     }
 
     userQuizz.questions = questionsListObj;
-    levelsCards();
 }
 
-const setLvlObj = () => {
+function setLvlObj() {
     for (let i = 0; i < quizzLevelsQtt; i++) {
-        const lvlTitle = lvlList[i].querySelector('.lvlTitle').value;
-        const lvlPercentage = lvlList[i].querySelector('.lvlPercentage').value;
-        const lvlImgUrl = lvlList[i].querySelector('.lvlImgUrl').value;
-        const lvlDescription = lvlList[i].querySelector('.lvlDescription').value;
         userQuizz.levels.push({
-            title: lvlTitle,
-            image: lvlImgUrl,
-            text: lvlDescription,
-            minValue: lvlPercentage,
-            image: lvlImgUrl,
-            text: lvlDescription,
-            minValue: lvlPercentage
+            title: lvlNodeList[i].querySelector('.lvlTitle').value,
+            image: lvlNodeList[i].querySelector('.lvlPercentage').value,
+            text: lvlNodeList[i].querySelector('.lvlPercentage').value,
+            minValue: lvlNodeList[i].querySelector('.lvlDescription').value
         })
     }
-
-    setTimeout(sendRequest(), 1000);
 }
-const levelsCards = function () {
-    for (let i = 1; i <= quizzLevelsQtt; i++) {
 
-        selectLevel.querySelector('div').innerHTML += `
+function levelsCards(l) {
+    for (let i = 1; i <= l; i++) {
+
+        lvlList += `
         <div class="level closed">
         <p>Nível ${i} <ion-icon name="create" onclick = showLevel(this)></ion-icon></p>
         <input type="text" required placeholder="Título do nível" class='lvlTitle'>
@@ -199,11 +378,12 @@ const levelsCards = function () {
     </div>`
     }
 
-    lvlList = document.querySelectorAll('.level');
+    return lvlList;
 }
-const questionsCards = (quizzQuestionsQtt) => {
+
+function questionsCards(quizzQuestionsQtt) {
     for (let i = 1; i <= quizzQuestionsQtt; i++) {
-        quizzQuestions.querySelector('div').innerHTML += `
+        questionsList += `
         <div class="question">
         <div class="doQuestion ">
             <p>Pergunta ${i} <ion-icon name="create" onclick="showQuestion(this)"></ion-icon></p>
@@ -233,20 +413,22 @@ const questionsCards = (quizzQuestionsQtt) => {
     </div>`
     }
 
-    questionsList = document.querySelectorAll('.question');
+    return questionsList;
 }
-const showLevel = (cardLvl) => {
+
+function showLevel(cardLvl) {
     const clickedCardLvl = cardLvl.parentElement.parentElement;
-    const selectedBefore = telaTres.querySelector('.level.openedLvl');
+    const selectedBefore = document.querySelector('.level.openedLvl');
 
     if (selectedBefore !== null) {
         selectedBefore.classList.remove('openedLvl');
     }
     clickedCardLvl.classList.add('openedLvl');
 }
-const showQuestion = (cardQuestion) => {
+
+function showQuestion(cardQuestion) {
     const clickedCardQuestion = cardQuestion.parentElement.parentElement.parentElement;
-    const selectedBefore = telaTres.querySelector('.question.opened');
+    const selectedBefore = document.querySelector('.question.opened');
 
     if (selectedBefore !== null) {
         selectedBefore.classList.remove('opened');
@@ -254,119 +436,10 @@ const showQuestion = (cardQuestion) => {
     clickedCardQuestion.classList.add('opened');
 }
 
-let successUserQuizz;
-let failedUserQuizz;
-const quizzTeste = {
-	title: "TESTETESTETEJSTETESTETESTE",
-	image: "https://http.cat/411.jpg",
-	questions: [
-		{
-			title: "Título da pergunta 1",
-			color: "#123456",
-			answers: [
-				{
-					text: "Texto da resposta 1",
-					image: "https://http.cat/411.jpg",
-					isCorrectAnswer: true
-				},
-				{
-					text: "Texto da resposta 2",
-					image: "https://http.cat/412.jpg",
-					isCorrectAnswer: false
-				}
-			]
-		},
-		{
-			title: "Título da pergunta 2",
-			color: "#123456",
-			answers: [
-				{
-					text: "Texto da resposta 1",
-					image: "https://http.cat/411.jpg",
-					isCorrectAnswer: true
-				},
-				{
-					text: "Texto da resposta 2",
-					image: "https://http.cat/412.jpg",
-					isCorrectAnswer: false
-				}
-			]
-		},
-		{
-			title: "Título da pergunta 3",
-			color: "#123456",
-			answers: [
-				{
-					text: "Texto da resposta 1",
-					image: "https://http.cat/411.jpg",
-					isCorrectAnswer: true
-				},
-				{
-					text: "Texto da resposta 2",
-					image: "https://http.cat/412.jpg",
-					isCorrectAnswer: false
-				}
-			]
-		}
-	],
-	levels: [
-		{
-			title: "Título do nível 1",
-			image: "https://http.cat/411.jpg",
-			text: "Descrição do nível 1",
-			minValue: 0
-		},
-		{
-			title: "Título do nível 2",
-			image: "https://http.cat/412.jpg",
-			text: "Descrição do nível 2",
-			minValue: 50
-		}
-	]
+function goToHome() {
+    window.location.reload()
 }
-const sendRequest = () => {
-    axios
-        .post(url, quizzTeste)
-        .then(response => {
-            console.log('deu tudo certo');
-            console.log(response);
-            successUserQuizz = response;
-            createdQuizzScreen();
-        })
-        .catch(response => {
-            console.log(response);
-            console.log('deu tudo errado');
-            failedUserQuizz = response;
-        })
-}
-const createdQuizzScreen = () => {
-    selectLevel.classList.add('hidden');
-    quizzCreated.classList.remove('hidden');
-    quizzCreated.querySelector('.photo').innerHTML = `
-    <img src="${quizzTeste.image}" alt="">
-    <p>${quizzTeste.title}</p>
-    `
+function accessQuizz(){
+    console.log(userQuizz)
 }
 
-
-//EVENT LISTENERS
-btnCreatQuizz.addEventListener('click', () => {
-    telaUm.classList.add('hidden');
-    telaTres.classList.remove('hidden');
-});
-btnGetCreatQuestions.addEventListener('click', () => {
-    isBlank();
-});
-
-btnGetCreatLvls.addEventListener('click', () => {
-    quizzQuestions.classList.add('hidden');
-    selectLevel.classList.remove('hidden');
-    creatQuizzObj();
-})
-selectLevelBtn.addEventListener('click', e => setLvlObj());
-
-btnGoToHome.addEventListener('click', e => window.location.reload())
-btnAccessQuizz.addEventListener('click', e => {
-    telaTres.classList.add('hidden')
-    telaDois.classList.remove('hidden');
-})
