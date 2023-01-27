@@ -531,18 +531,34 @@ ion-icon {
     gap: 20px 30px;
     margin-top: 20px;
 }
-
-.perguntas li img {
+li img {
     width: 330px;
     height: 175px;
     object-fit: fill;
 }
 
-.perguntas li .opcao {
+li .opcao {
     width: 330px;
-    word-wrap: wrap;
+    word-break: break-word;
     font-size: 20px;
     font-weight: 700;
     line-height: 23px;
     color: #000000;
+}
+
+.Ulmarcada li{
+    opacity: 0.3;
+}
+
+.Ulmarcada .marcado{
+    opacity: 1;
+}
+.Ulmarcada .true{
+    color: #009C22;
+}
+.Ulmarcada .false{
+    color: #FF4B4B;
+}
+.proxima{
+    scroll-margin-top: 100px;
 }
