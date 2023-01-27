@@ -228,11 +228,11 @@ function goTocreatQuizz() {
 }
 
 function goToCreatQuestions() {
-    if (isBlank() === false) {
-        return
-    } else if (isValid(quizzTitle.value, quizzImgUrl.value, quizzQuestionsQtt.value, quizzLevelsQtt.value) === false) {
-        return
-    }
+    // if (isBlank() === false) {
+    //     return
+    // } else if (isValid(quizzTitle.value, quizzImgUrl.value, quizzQuestionsQtt.value, quizzLevelsQtt.value) === false) {
+    //     return
+    // }
 
     container.querySelector('.telaTres').innerHTML = `
     <div class="quizzQuestions">
@@ -281,28 +281,28 @@ function isBlank() {
 
 function isValid(titulo, imgUrl, questionsQtt, lvlQtt) {
 
-    if (titulo.length < 20 || titulo.length > 65) {
-        alert('Titulo com tamanho invalido');
-        return false
-    }
-    if(imgUrl.includes('https://') || imgUrl.includes('http://')){
-        if(imgUrl.includes('.jpg') || imgUrl.includes('.jpeg') || imgUrl.includes('.png') || imgUrl.includes('.webp')){
-        }else{
-            alert('insira uma URL válida para sua imagem')
-            return false
-        }
-    } else {
-        alert('insira uma URL válida para sua imagem')
-        return false
-    }
-    if (!Number(questionsQtt) || Number(questionsQtt) < 3) {
-        alert('Quantidade de perguntas inválida (pelo menos 3)')
-        return false
-    }
-    if (!Number(lvlQtt) || Number(lvlQtt) < 2) {
-        alert('Quantidade de níveis inválida (pelo menos 2)')
-        return false
-    }
+    // if (titulo.length < 20 || titulo.length > 65) {
+    //     alert('Titulo com tamanho invalido');
+    //     return false
+    // }
+    // if(imgUrl.includes('https://') || imgUrl.includes('http://')){
+    //     if(imgUrl.includes('.jpg') || imgUrl.includes('.jpeg') || imgUrl.includes('.png') || imgUrl.includes('.webp')){
+    //     }else{
+    //         alert('insira uma URL válida para sua imagem')
+    //         return false
+    //     }
+    // } else {
+    //     alert('insira uma URL válida para sua imagem')
+    //     return false
+    // }
+    // if (!Number(questionsQtt) || Number(questionsQtt) < 3) {
+    //     alert('Quantidade de perguntas inválida (pelo menos 3)')
+    //     return false
+    // }
+    // if (!Number(lvlQtt) || Number(lvlQtt) < 2) {
+    //     alert('Quantidade de níveis inválida (pelo menos 2)')
+    //     return false
+    // }
 
     quizzTitle = titulo;
     quizzImgUrl = imgUrl;
