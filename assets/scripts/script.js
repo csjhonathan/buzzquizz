@@ -154,9 +154,6 @@ const showQuizz = receivedQuizz => {
         <div><span>${quizzData.title}</span></div>
     </div>
     <div class="questionBox">${getQuestionTemplate(quizzData)}</div>`
-
-
-
 }
 
 function getQuestionTemplate(quizzData) {
@@ -443,3 +440,61 @@ function accessQuizz(){
     console.log(userQuizz)
 }
 
+// Tela Dois 
+
+function AbrirQuizz(identificador){
+    container.classList.add("hidden");
+    containerTelaDois.classList.remove("hidden");
+    const promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${identificador}`);
+    promise.then(ExibiQuizz);
+    promise.catch(ErroExibirQuizz);
+}
+function ExibiQuizz(resposta){
+    const fundo = document.querySelector(".topo img");
+    fundo.src = resposta.data.image;
+    const texto = document.querySelector(".topo div");
+    texto.innerHTML = resposta.data.title;
+    ExibirPerguntas(resposta.data.questions);
+}
+function ErroExibirQuizz(resposta){
+    alert("O Quizz que você procura não se encontra disponível, selecione outro para continuar com a diversão");
+        window.location.reload(true);
+}
+
+function ExibirPerguntas(perguntas){
+    console.log(perguntas);
+    const exibindo = document.querySelector(".telaDois .caixote");
+    console.log(exibindo);
+    for (let i=0; i<perguntas.length; i++){
+        exibindo.innerHTML +=`
+                <div class="perguntas">
+                <div class="pergunta">
+                    ${perguntas[i].title}
+                </div>
+                <ul class="respostas indice${i}">       
+                </ul>
+            </div>
+        `
+    }
+    ExibirQuest(perguntas)
+}
+
+function ExibirQuest(data){
+    console.log(data);
+    for(let i=0; i<data.length; i++){
+        const listaUl = document.querySelector(`.indice${i}`)
+        const embaralhado = data[i].answers
+        embaralhado.sort(embaralhar);
+        for(let b=0; b<data[i].answers.length; b++){
+            listaUl.innerHTML +=`
+            <li>
+                <img src="${data[i].answers[b].image}" alt="Imagem Não Encontrada">
+                <div class="opcao">${embaralhado[b].text}</div>
+            </li>
+            `
+        }
+    }
+}
+function embaralhar() { 
+	return Math.random() - 0.5; 
+}

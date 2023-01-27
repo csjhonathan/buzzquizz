@@ -485,7 +485,7 @@ ion-icon {
     z-index: 1;
     width: 100%;
     height: 227px;
-    background: linear-gradient(rgba(0, 0, 0, 0.40), rgba(0, 0, 0, 0.40));
+    background: linear-gradient(rgba(0,0,0,0.60),rgba(0,0,0,0.60));
     color: #FFFFFF;
     font-size: 39px;
     font-weight: 400;
@@ -535,7 +535,7 @@ ion-icon {
 .perguntas li img {
     width: 330px;
     height: 175px;
-    object-fit: cover;
+    object-fit: fill;
 }
 
 .perguntas li .opcao {
