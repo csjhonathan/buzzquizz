@@ -3,7 +3,7 @@ const btnCreatQuizz = document.querySelector('.novoQuizz button'); //<== botão 
 const container = document.querySelector('.container');
 const newQuizz = container.querySelector('.novoQuizz');
 const allQuizzes = container.querySelector('.todosQuizzes');
-
+const containerTelaDois = document.querySelector(".containerTelaDois")
 
 let quizzes = [];
 
@@ -29,7 +29,7 @@ function quizzesIniciais() {
 
     for (let i = 0; i < 6; i++) {
         const boxQuizz = `
-        <li>
+        <li onclick="AbrirQuizz(${quizzes[i].id})">
             <img src="${quizzes[i].image}" alt="">
             <p>${quizzes[i].title}</p>
         </li>
@@ -37,6 +37,7 @@ function quizzesIniciais() {
         iniciais.innerHTML += boxQuizz
 
         console.log(quizzes[i].image)
+        console.log(quizzes[i].id)
     }
 }
 
@@ -172,3 +173,67 @@ btnCreatQuizz.addEventListener('click', callScreeThree => {
     allQuizzes.classList.add('hidden');
     telaTres.classList.remove('hidden');
 })
+
+// Tela Dois 
+
+function AbrirQuizz(identificador){
+    container.classList.add("hidden");
+    containerTelaDois.classList.remove("hidden");
+    const promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${identificador}`);
+    promise.then(ExibiQuizz);
+    promise.catch(ErroExibirQuizz);
+}
+function ExibiQuizz(resposta){
+    const fundo = document.querySelector(".topo img");
+    fundo.src = resposta.data.image;
+    const texto = document.querySelector(".topo div");
+    texto.innerHTML = resposta.data.title;
+    ExibirPerguntas(resposta.data.questions);
+}
+function ErroExibirQuizz(resposta){
+    alert("O Quizz que você procura não se encontra disponível, selecione outro para continuar com a diversão");
+        window.location.reload(true);
+}
+
+/*function ExibirPerguntas(absol){
+    console.log(absol)
+
+}*/
+
+function ExibirPerguntas(perguntas){
+    console.log(perguntas);
+    const exibindo = document.querySelector(".telaDois .caixote");
+    console.log(exibindo);
+    for (let i=0; i<perguntas.length; i++){
+        exibindo.innerHTML +=`
+                <div class="perguntas">
+                <div class="pergunta">
+                    ${perguntas[i].title}
+                </div>
+                <ul class="respostas indice${i}">       
+                </ul>
+            </div>
+        `
+    }
+    ExibirQuest(perguntas)
+}
+
+function ExibirQuest(data){
+    console.log(data);
+    for(let i=0; i<data.length; i++){
+        const listaUl = document.querySelector(`.indice${i}`)
+        const embaralhado = data[i].answers
+        embaralhado.sort(embaralhar);
+        for(let b=0; b<data[i].answers.length; b++){
+            listaUl.innerHTML +=`
+            <li>
+                <img src="${data[i].answers[b].image}" alt="Imagem Não Encontrada">
+                <div class="opcao">${embaralhado[b].text}</div>
+            </li>
+            `
+        }
+    }
+}
+function embaralhar() { 
+	return Math.random() - 0.5; 
+}
