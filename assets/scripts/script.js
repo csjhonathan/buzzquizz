@@ -71,7 +71,7 @@ const quizzTeste = {
     ]
 }
 
-//VARIAVEIS DA TELA 3
+//VARIAVEIS DA TELA 3 5
 let lvlList = '';
 let lvlNodeList;
 let quizzes = [];
@@ -141,9 +141,7 @@ const openQuizz = (quizz) => {
         .then(response => {
             showQuizz(response)
         })
-        .catch(response => {
-            alert('erro ao abrir quizz')
-        })
+        .catch(ErroExibirQuizz)
 }
 const showQuizz = receivedQuizz => {
     const quizzData = receivedQuizz.data;
@@ -161,7 +159,7 @@ function getQuestionTemplate(quizzData) {
     const quizzQuestions = quizzData.questions;
     for (let i = 0; i < quizzQuestions.length; i++) {
         questionsTemplate += `
-        <div class="perguntas">
+        <div class="perguntas proxima">
             <div class="pergunta" style = "background-color: ${quizzQuestions[i].color}">
                 ${quizzQuestions[i].title}
             </div>
@@ -172,14 +170,16 @@ function getQuestionTemplate(quizzData) {
     return questionsTemplate;
 }
 function getAnswers(quizzAnswers){
+    const sortedAnswers = quizzAnswers.sort(embaralhar)
+    console.log(quizzAnswers)
     let answersTemplate= '';
     for(let i = 0; i < quizzAnswers.length; i++){
-        console.log(quizzAnswers[i], i)
+        console.log(sortedAnswers[i], i)
 
         answersTemplate += `
-            <li data-iscorrect = '${quizzAnswers[i].isCorrectAnswer}' >
-                <img src="${quizzAnswers[i].image}" alt="Imagem Não Encontrada">
-                <div class="opcao">${quizzAnswers[i].text}</div>
+            <li onclick="marcar(this)" data-iscorrect = '${sortedAnswers[i].isCorrectAnswer}'>
+                <img src="${sortedAnswers[i].image}" alt="Imagem Não Encontrada">
+                <div class="opcao ${sortedAnswers[i].isCorrectAnswer}">${sortedAnswers[i].text}</div>
             </li>` 
         
     }
@@ -442,26 +442,26 @@ function accessQuizz(){
 
 // Tela Dois 
 
-function AbrirQuizz(identificador){
+/*function AbrirQuizz(identificador){
     container.classList.add("hidden");
     containerTelaDois.classList.remove("hidden");
     const promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${identificador}`);
     promise.then(ExibiQuizz);
     promise.catch(ErroExibirQuizz);
-}
-function ExibiQuizz(resposta){
+}*/
+/*function ExibiQuizz(resposta){
     const fundo = document.querySelector(".topo img");
     fundo.src = resposta.data.image;
     const texto = document.querySelector(".topo div");
     texto.innerHTML = resposta.data.title;
     ExibirPerguntas(resposta.data.questions);
-}
+}*/
 function ErroExibirQuizz(resposta){
     alert("O Quizz que você procura não se encontra disponível, selecione outro para continuar com a diversão");
         window.location.reload(true);
 }
 
-function ExibirPerguntas(perguntas){
+/*function ExibirPerguntas(perguntas){
     console.log(perguntas);
     const exibindo = document.querySelector(".telaDois .caixote");
     console.log(exibindo);
@@ -477,9 +477,9 @@ function ExibirPerguntas(perguntas){
         `
     }
     ExibirQuest(perguntas)
-}
+}*/
 
-function ExibirQuest(data){
+/*function ExibirQuest(data){
     console.log(data);
     for(let i=0; i<data.length; i++){
         const listaUl = document.querySelector(`.indice${i}`)
@@ -494,7 +494,26 @@ function ExibirQuest(data){
             `
         }
     }
-}
+}*/
 function embaralhar() { 
 	return Math.random() - 0.5; 
+}
+
+function marcar(selecionado){
+    const Jaselecionada = document.querySelector("ul .marcada");
+    const UlJaMarcada = selecionado.parentNode.classList.contains("Ulmarcada");
+    const proxima = document.querySelector('.proxima');
+    console.log(proxima);
+    if(Jaselecionada === null && !UlJaMarcada){
+        selecionado.classList.add("marcado");
+        selecionado.parentNode.classList.add("Ulmarcada");
+        proxima.classList.remove('proxima');
+    }
+    setTimeout(rolar,2000);
+    console.log(selecionado)
+}
+function rolar(){
+    const proxima = document.querySelector('.proxima');
+    console.log(proxima)
+    proxima.scrollIntoView({behavior:"smooth"});
 }
