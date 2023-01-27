@@ -16,21 +16,23 @@
 <body>
     <header> BuzzQuizz </header>
     <div class="container">
+
         <div class="telaUm ">
             <div class="novoQuizz">
                 <p>Você não criou nenhum quizz ainda :(</p>
                 <button>Criar Quizz</button>
             </div>
-    
+
             <div class="todosQuizzes">
                 <div class="titulo">
                     <h1>Todos os Quizzes</h1>
                 </div>
                 <ul class="listaQuizzes">
-    
+
                 </ul>
             </div>
         </div>
+<<<<<<< HEAD
         <div class="telaTres hidden">
             <div class="basicInfo">
                 <p>Comece pelo começo</p>
@@ -76,12 +78,50 @@
         <div class="telaDois" >
             <div class="topo">
                 <img src="" alt="Imagem Não Encontrada">
+=======
+        <div class="telaDois hidden">
+            <div class="topo">
+                <img src="/assets/imgTeste/Rectangle34.png" alt="Imagem Não Encontrada" class="quizzHeader">
+>>>>>>> 710a347fa08106e02fde076e5a6559ce74c6feac
                 <div></div>
             </div>
             <div class="caixote">
             </div>
         </div>
+        <div class="telaTres hidden">
+            <div class="basicInfo">
+                <p>Comece pelo começo</p>
+                <div class="inputs">
+                    <input type="text" placeholder="Título do seu quizz" required class="quizzTitle">
+                    <input type="text" placeholder="URL da imagem do seu quizz" required class="quizzImgUrl">
+                    <input type="text" placeholder="Quantidade de perguntas do quizz" required
+                        class="quizzQuestionsQtt">
+                    <input type="text" placeholder="Quantidade de níveis do quizz" required class="quizzLevelsQtt">
+                </div>
+                <button>Prosseguir pra criar perguntas</button>
+            </div>
+            <div class="quizzQuestions hidden">
+                <p>Crie suas perguntas</p>
+                <div></div>
+                <button>Prosseguir pra criar níveis</button>
+            </div>
+            <div class="selectLevel hidden">
+                <p>Agora, decida os níveis </ion-icon></p>
+                <div class="levels"></div>
+                <button>Finalizar Quizz</button>
+            </div>
+            <div class="quizzCreated hidden">
+                <p>Seu quizz está pronto!</p>
+                <div class="photo">
+                    <img src="./assets/imgTeste/Rectangle 34.png" alt="">
+                    <p>O quão Potterhead é você?</p>
+                </div>
+                <button class="accessQuizz">Acessar Quizz</button>
+                <button class="goToHome">Voltar pra home</button>
+            </div>
+        </div>
     </div>
+
 
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>

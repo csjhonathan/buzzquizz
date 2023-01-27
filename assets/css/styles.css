@@ -12,6 +12,10 @@ body {
     background-color: #fafafa;
 }
 
+button {
+    cursor: pointer;
+}
+
 header {
     background-color: #EC362D;
     width: 100%;
@@ -25,30 +29,26 @@ header {
     color: white;
     position: fixed;
     top: 0px;
-    right: 0px;
+    left: 0px;
     z-index: 10;
 }
 
-header {
+.container {
     width: 100%;
-    height: 69px;
-    background: #EC362D;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    font-weight: 700;
-    font-size: 37px;
-    color: #FFFFFF;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin: 69px auto;
+    background-color: #fafafa;
 }
 
-.container {
-    max-width: 1051px;
-    margin: 77px auto;
+/******/
+.telaUm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 69px;
 }
 
 .novoQuizz {
-    width: 100%;
+    min-width: 1080px;
     height: 181px;
     background-color: #FAFAFA;
     border: 1px dashed #D5D5D5;
@@ -84,16 +84,8 @@ header {
     cursor: pointer;
 }
 
-/******/
-
-.todosQuizzes {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-}
-
 .todosQuizzes .titulo {
-    width: 100%;
+    text-align: left;
 }
 
 .todosQuizzes .titulo h1 {
@@ -104,14 +96,18 @@ header {
 }
 
 .listaQuizzes {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(3, 2fr);
+    gap: 15px;
     margin-top: 12px;
 }
 
 .listaQuizzes li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 350px;
+    height: 190px;
     list-style-type: none;
     position: relative;
 }
@@ -119,9 +115,17 @@ header {
 .listaQuizzes li img {
     width: 340px;
     height: 181px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(image.png);
     border-radius: 5px;
     cursor: pointer;
+}
+
+.listaQuizzes li .gradient {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%);
+    position: absolute;
+    z-index: 3;
+    bottom: 0;
 }
 
 .listaQuizzes li p {
@@ -134,6 +138,7 @@ header {
     bottom: 10px;
     left: 20px;
 }
+
 /*TELA3*/
 .telaTres {
     background-color: #fafafa;
@@ -166,7 +171,7 @@ header {
 
 .telaTres input {
     width: 564px;
-    height: 46px;
+    min-height: 46px;
     background: #FFFFFF;
     border: 1px solid #D1D1D1;
     border-radius: 5px;
@@ -193,7 +198,6 @@ header {
     font-size: 23px;
     line-height: 27px;
     color: #000000;
-    margin-top: 5.5%;
 }
 
 .basicInfo button {
@@ -283,6 +287,7 @@ header {
     margin-top: 32px;
     margin-bottom: 32px;
 }
+
 .quizzQuestions button {
     margin-top: 81px;
     width: 354px;
@@ -301,13 +306,14 @@ header {
 /*ESTILIZAÇÕES PARA A TELA 3
     3- DECIDA OS NIVEIS*/
 
-.selectLevel{
+.selectLevel {
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 100%;
 }
-.selectLevel > p{
+
+.selectLevel>p {
     font-weight: 700;
     font-size: 20px;
     line-height: 23px;
@@ -315,24 +321,33 @@ header {
     margin-bottom: 43px;
 }
 
-.level{
-    width: 600px;
-    height: 316px;
-    background: #FFFFFF;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+.level {
     display: flex;
     flex-direction: column;
+    width: 600px;
+    height: 74px;
     align-items: center;
-    justify-content: space-evenly;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    padding-top: 27px;
+    transition: all .5s;
 }
-.level p{
+
+.level input {
+    margin-bottom: 14px;
+}
+
+.level p {
+    margin-bottom: 24px;
     width: 564px;
     font-style: normal;
     font-weight: 700;
     font-size: 20px;
-    line-height: 23px;  
+    line-height: 23px;
     color: #000000;
 }
+
 .selectLevel button {
     width: 324px;
     height: 54px;
@@ -345,10 +360,11 @@ header {
     border: none;
     margin-top: 75px;
 }
+
 /*ESTILIZAÇÕES PARA A TELA 3
     4 - QUIZZ PRONTO*/
 
-.quizzCreated{
+.quizzCreated {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -356,7 +372,7 @@ header {
     width: 600px;
 }
 
-.quizzCreated > p{
+.quizzCreated>p {
     font-weight: 700;
     font-size: 20px;
     line-height: 23px;
@@ -364,9 +380,15 @@ header {
     margin-bottom: 43px;
 }
 
-.photo{
+.photo {
     position: relative;
 }
+
+.photo img {
+    width: 500px;
+    height: 266px;
+}
+
 .photo p {
     display: flex;
     align-items: center;
@@ -380,7 +402,7 @@ header {
     left: 23px
 }
 
-.quizzCreated button:nth-child(2n - 1){
+.quizzCreated button:nth-child(2n - 1) {
     margin-top: 45px;
     margin-bottom: 9px;
     width: 221px;
@@ -394,7 +416,7 @@ header {
     color: #FFF5F4;
 }
 
-.quizzCreated button:nth-child(2n - 2){
+.quizzCreated button:nth-child(2n - 2) {
     width: 221px;
     height: 44px;
     background-color: transparent;
@@ -406,47 +428,60 @@ header {
     color: #818181;
 }
 
-ion-icon{
+ion-icon {
     cursor: pointer;
 }
-.closed{
+
+.closed {
     width: 601px;
-    height: 74px;  
+    height: 74px;
     margin-top: 24px;
 }
 
-.opened{
+.opened {
     height: 856px;
     transition: all .9s;
 }
-.closed p{
+
+.openedLvl {
+    height: 316px;
+    transition: all .9s;
+}
+
+.closed p {
     display: flex;
     width: 564px;
     justify-content: space-between;
 }
+
 .hidden {
+    width: 0%;
     opacity: 0;
     display: none;
 }
-.containerTelaDois{
-    margin-top: 69px;
-}
 
 /* Estilização Tela 2*/
-.topo{
+
+.telaDois {
+    width: 100%;
+}
+
+.topo {
     position: relative;
     width: 100%;
     height: 227px;
 }
-.topo img{
+
+.topo img {
     width: 100%;
     height: 227px;
     object-fit: cover;
 }
-.topo div{
+
+.topo div {
     position: absolute;
     top: 0px;
-    right:0px;
+    right: 0px;
     z-index: 1;
     width: 100%;
     height: 227px;
@@ -459,10 +494,12 @@ ion-icon{
     align-items: center;
     justify-content: center;
 }
-.caixote{
+
+.caixote {
     margin-bottom: 100px;
 }
-.perguntas{
+
+.perguntas {
     width: 760px;
     height: auto;
     background-color: #FFFFFF;
@@ -474,7 +511,8 @@ ion-icon{
     padding-top: 25px;
 
 }
-.pergunta{
+
+.pergunta {
     background-color: #434CA0;
     width: 100%;
     height: 140px;
@@ -486,20 +524,22 @@ ion-icon{
     line-height: 27px;
     color: #FFFFFF;
 }
-ul{
+
+.telaDois ul {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px 30px;
     margin-top: 20px;
 }
-.perguntas li img{
+
+.perguntas li img {
     width: 330px;
     height: 175px;
     object-fit: fill;
 }
 
-.perguntas li .opcao{
+.perguntas li .opcao {
     width: 330px;
     word-wrap: wrap;
     font-size: 20px;
@@ -507,5 +547,3 @@ ul{
     line-height: 23px;
     color: #000000;
 }
-
-

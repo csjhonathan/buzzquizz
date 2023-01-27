@@ -1,0 +1,85 @@
+@media (max-width: 1100px) {
+
+    .container {
+        width: 96%;
+        display: flex;
+        justify-content: center;
+        margin: 100px 2%;
+    }
+
+    .novoQuizz {
+        margin-bottom: 35px;
+
+    }
+
+    .listaQuizzes {
+        justify-content: space-evenly;
+    }
+
+    /*tela 3 */
+
+    .telaTres {
+        width: 100%;
+    }
+
+    .telaTres div {
+        width: 100%;
+    }
+
+    .telaTres .inputs {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .basicInfo button {
+        width: 323px;
+    }
+
+    .selectLevel .level,
+    .quizzQuestions,
+    .question {
+        width: 100%;
+    }
+
+    .wrong {
+        width: 340px;
+    }
+
+    .question p {
+        width: 300px;
+    }
+
+    .selectLevel {
+        width: 385px;
+    }
+
+    .selectLevel .levels {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .selectLevel .level p {
+        width: 300px;
+    }
+
+    .telaTres .inputs input,
+    .telaTres .questionText,
+    .telaTres .questionColor,
+    .telaTres .questionCorrectAnswer,
+    .telaTres .questionCorrectAnswerImg,
+    .wrong .wrongOne,
+    .wrong .wrongOneImg,
+    .wrong .wrongTwo,
+    .wrong .wrongTwoImg,
+    .wrong .wrongThree,
+    .wrong .wrongThreeImg,
+    .level .lvlTitle,
+    .level .lvlPercentage,
+    .level .lvlImgUrl,
+    .level .lvlDescription {
+        width: 90%
+    }
+}
