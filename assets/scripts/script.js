@@ -141,9 +141,7 @@ const openQuizz = (quizz) => {
         .then(response => {
             showQuizz(response)
         })
-        .catch(response => {
-            alert('erro ao abrir quizz')
-        })
+        .catch(ErroExibirQuizz);
 }
 const showQuizz = receivedQuizz => {
     const quizzData = receivedQuizz.data;
@@ -442,20 +440,20 @@ function accessQuizz(){
 
 // Tela Dois 
 
-function AbrirQuizz(identificador){
-    container.classList.add("hidden");
-    containerTelaDois.classList.remove("hidden");
-    const promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${identificador}`);
-    promise.then(ExibiQuizz);
-    promise.catch(ErroExibirQuizz);
-}
-function ExibiQuizz(resposta){
-    const fundo = document.querySelector(".topo img");
-    fundo.src = resposta.data.image;
-    const texto = document.querySelector(".topo div");
-    texto.innerHTML = resposta.data.title;
-    ExibirPerguntas(resposta.data.questions);
-}
+// function AbrirQuizz(identificador){
+//     container.classList.add("hidden");
+//     containerTelaDois.classList.remove("hidden");
+//     const promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${identificador}`);
+//     promise.then(ExibiQuizz);
+//     promise.catch(ErroExibirQuizz);
+// }
+// function ExibiQuizz(resposta){
+//     const fundo = document.querySelector(".topo img");
+//     fundo.src = resposta.data.image;
+//     const texto = document.querySelector(".topo div");
+//     texto.innerHTML = resposta.data.title;
+//     ExibirPerguntas(resposta.data.questions);
+// }
 function ErroExibirQuizz(resposta){
     alert("O Quizz que você procura não se encontra disponível, selecione outro para continuar com a diversão");
         window.location.reload(true);
