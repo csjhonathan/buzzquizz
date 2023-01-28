@@ -3,7 +3,7 @@ const container = document.querySelector('.container');
 const newQuizz = container.querySelector('.novoQuizz');
 const allQuizzes = container.querySelector('.todosQuizzes');
 const quizzTeste = {
-    title: "TESTETESTETEJSTETESTETESTE",
+    title: "SABADOTESTETESTETEJSTETESTETESTE",
     image: "https://http.cat/411.jpg",
     questions: [
         {
@@ -70,10 +70,11 @@ const quizzTeste = {
         }
     ]
 }
+
 const localQuizzes = [];
 const savedQuizzes = localStorage.getItem('Quizzes');
-
-//VARIAVEIS DA TELA 3 5
+let newUserQuizz;
+//VARIAVEIS DA TELA 3
 let lvlList = '';
 let lvlNodeList;
 let quizzes = [];
@@ -85,7 +86,25 @@ let quizzQuestionsQtt;
 let quizzLevelsQtt;
 let successUserQuizz;
 let failedUserQuizz;
+const userQuizz = {
+    title: quizzTitle,
+    image: quizzImgUrl,
+    questions: [],
+    levels: []
+};
+const telaUm = document.querySelector('.telaUm')
+const telaTres = document.querySelector('.telaTres');
+const telaDois = document.querySelector('.telaDois');
+//TELA 3.1
+const basicInfo = document.querySelector('.basicInfo');
+//TELA 3.2
+const quizzQuestions = document.querySelector('.telaTres .quizzQuestions');
+//TELA 3.3
+const selectLevel = document.querySelector('.telaTres .selectLevel');
+//TELA 3.4
+const quizzCreated = document.querySelector('.telaTres .quizzCreated');
 //================================
+
 todosQuizzes();
 
 
@@ -94,7 +113,13 @@ function ShowUserQuizz() {
 
     const userQuizzesScreen = document.querySelector('.userQuizz');
     const userQuizzTitle = document.querySelector('.userQuizzes .titulo')
-    const userQuizzes = local(localQuizzes);
+    const userQuizzes = local(localQuizzes)
+    const recentUserQuizz = [];
+
+    for (let i = userQuizzes.length - 1; i >= 0; i--) {
+        recentUserQuizz.push(userQuizzes[i])
+    }
+
     if (userQuizzes.length <= 0) {
         return
     }
@@ -103,9 +128,9 @@ function ShowUserQuizz() {
     userQuizzesScreen.classList.remove('userQuizz');
     userQuizzTitle.innerHTML = `Seus Quizzes <ion-icon onclick ="goTocreatQuizz()" class = "addQuizz" name="add-circle"></ion-icon>`
     userQuizzesScreen.innerHTML = '';
-    for (let i = 0; i < userQuizzes.length; i++) {
+    for (let i = 0; i < recentUserQuizz.length; i++) {
         axios
-            .get(url + userQuizzes[i].id)
+            .get(url + recentUserQuizz[i].id)
             .then(response => {
                 {
                     const individualQuizz = response.data
@@ -172,31 +197,30 @@ function quizzesIniciais() {
     const iniciais = document.querySelector('.listaQuizzes');
     let serverQuizzList = 0;
     iniciais.innerHTML = ''
-    if(arrLocal===null){
+    if (arrLocal === null) {
         for (let i = 0; serverQuizzList < 6; i++) {
-                const boxQuizz = `
+            const boxQuizz = `
             <li onclick = openQuizz(this) data-id = '${quizzes[i].id}' class='serverQuizz' >
                 <img src="${quizzes[i].image}" alt="">
                 <div class="gradient"><p>${quizzes[i].title}</p></div>
                 
             </li>
             `
-            ; iniciais.innerHTML += boxQuizz
-            
+                ; iniciais.innerHTML += boxQuizz
+
             serverQuizzList = document.querySelectorAll('.serverQuizz').length;
         }
-    } else{
-        for(let i = 0; i<arrLocal.length;i++){
+    } else {
+        for (let i = 0; i < arrLocal.length; i++) {
             arrLocalId.push(arrLocal[i].id);
         }
     }
-    
-    
-    
+
+
+
     for (let i = 0; serverQuizzList < 6; i++) {
-        if(arrLocalId.includes(quizzes[i].id)){
-            console.log(true)
-        }else{
+        if (arrLocalId.includes(quizzes[i].id)) {
+        } else {
             const boxQuizz = `
         <li onclick = openQuizz(this) data-id = '${quizzes[i].id}' class='serverQuizz' >
             <img src="${quizzes[i].image}" alt="">
@@ -204,7 +228,7 @@ function quizzesIniciais() {
             
         </li>
         `
-        ; iniciais.innerHTML += boxQuizz
+                ; iniciais.innerHTML += boxQuizz
         }
         serverQuizzList = document.querySelectorAll('.serverQuizz').length;
     }
@@ -258,25 +282,7 @@ function getAnswers(quizzAnswers) {
     return answersTemplate;
 }
 //FUNÇÕES 3 =======================================================
-const telaUm = document.querySelector('.telaUm')
-const telaTres = document.querySelector('.telaTres');
-const telaDois = document.querySelector('.telaDois');
 
-//TELA 3.1
-const basicInfo = document.querySelector('.basicInfo');
-
-//TELA 3.2
-const quizzQuestions = document.querySelector('.telaTres .quizzQuestions');
-
-
-//TELA 3.3
-const selectLevel = document.querySelector('.telaTres .selectLevel');
-
-
-//TELA 3.4
-const quizzCreated = document.querySelector('.telaTres .quizzCreated');
-
-const userQuizz = { title: quizzTitle, image: quizzImgUrl, questions: [], levels: [] };
 
 function goTocreatQuizz() {
     container.innerHTML = `
@@ -284,38 +290,30 @@ function goTocreatQuizz() {
             <div class="basicInfo">
                 <p>Comece pelo começo</p>
                 <div class="inputs">
-                    <input onkeyup="inputValidator(this)" type="text" placeholder="Título do seu quizz" required class="quizzTitle">
-                    <input onkeyup="inputValidator(this)" type="text" placeholder="URL da imagem do seu quizz" required class="quizzImgUrl">
-                    <input onkeyup="inputValidator(this)" type="text" placeholder="Quantidade de perguntas do quizz" required class="quizzQuestionsQtt">
-                    <input onkeyup="inputValidator(this)" type="text" placeholder="Quantidade de níveis do quizz" required class="quizzLevelsQtt">
+                    <div><input onkeyup="inputValidator(this)" type="text" placeholder="Título do seu quizz" required class="quizzTitle"><p class='warning'></p></div>
+                    <div><input onkeyup="inputValidator(this)" type="text" placeholder="URL da imagem do seu quizz" required class="quizzImgUrl"><p class='warning'></p></div>
+                    <div><input onkeyup="inputValidator(this)" type="text" placeholder="Quantidade de perguntas do quizz" required class="quizzQuestionsQtt"><p class='warning'></p></div>
+                    <div><input onkeyup="inputValidator(this)" type="text" placeholder="Quantidade de níveis do quizz" required class="quizzLevelsQtt"><p class='warning'></p></div>
                 </div>
                 <button onclick = goToCreatQuestions()>Prosseguir pra criar perguntas</button>
             </div>
         </div>`
-    quizzTitle = document.querySelector('.quizzTitle');
-    quizzImgUrl = document.querySelector('.quizzImgUrl');
-    quizzQuestionsQtt = document.querySelector('.quizzQuestionsQtt');
-    quizzLevelsQtt = document.querySelector('.quizzLevelsQtt');
 }
 
 function goToCreatQuestions() {
-    // if (isBlank() === false) {
-    //     return
-    // } else if (isValid(quizzTitle.value, quizzImgUrl.value, quizzQuestionsQtt.value, quizzLevelsQtt.value) === false) {
-    //     return
-    // }
+    if (isBlank() === false) {
+        return
+    } else if (isValid(quizzTitle, quizzImgUrl, quizzQuestionsQtt, quizzLevelsQtt) === false) {
+        return
+    }
 
     container.querySelector('.telaTres').innerHTML = `
     <div class="quizzQuestions">
     <p>Crie suas perguntas</p>
-    <div>${questionsCards(quizzQuestionsQtt.value)}</div>
+    <div>${questionsCards(quizzQuestionsQtt)}</div>
     <button onclick = 'goToCreatLevels()'>Prosseguir pra criar níveis</button>
     </div>
     `
-    quizzTitle = quizzTitle.value;
-    quizzImgUrl = quizzImgUrl.value;
-    quizzQuestionsQtt = quizzQuestionsQtt.value;
-    quizzLevelsQtt = quizzLevelsQtt.value
 }
 
 function goToCreatLevels() {
@@ -331,18 +329,7 @@ function goToCreatLevels() {
 
 function goToQuizzCreated() {
     setLvlObj();
-    container.querySelector('.telaTres').innerHTML = `
-    <div class="quizzCreated">
-        <p>Seu quizz está pronto!</p>
-        <div class="photo">
-            <img src="${quizzTeste.image}" alt="">
-            <p>${quizzTeste.title}</p>
-        </div>
-        <button onclick = 'accessQuizz()'> Acessar Quizz</button>
-        <button onclick = 'goToHome()'> Voltar pra home</button>
-    </div>`
-
-    sendRequest(quizzTeste);
+    sendRequest(userQuizz);
 }
 function sendRequest(newQuizz) {
     axios
@@ -353,8 +340,23 @@ function sendRequest(newQuizz) {
                 id: response.data.id
             })
             storageQuizzes()
-
+            container.querySelector('.telaTres').innerHTML = `
+    <div class="quizzCreated">
+        <p>Seu quizz está pronto!</p>
+        <div class="photo">
+            <img src="${newQuizz.image}" alt="">
+            <p>${newQuizz.title}</p>
+        </div>
+        <button onclick = 'accessQuizz()'> Acessar Quizz</button>
+        <button onclick = 'goToHome()'> Voltar pra home</button>
+    </div>`
+            newUserQuizz = response;
         })
+        .catch(response => {
+            alert('erro ao enviar o quizz')
+        })
+
+
 }
 
 function storageQuizzes() {
@@ -362,45 +364,39 @@ function storageQuizzes() {
     localStorage.setItem('Quizzes', localQuizzesStorage)
 }
 function isBlank() {
-    if (quizzTitle.value === '' ||
-        quizzImgUrl.value === '' ||
-        quizzQuestionsQtt.value === '' ||
-        quizzLevelsQtt.value === '') {
+    if (quizzTitle === undefined ||
+        quizzImgUrl === undefined ||
+        quizzQuestionsQtt === undefined ||
+        quizzLevelsQtt === undefined) {
         alert('Preencha todos os campos')
         return false
     }
 
 }
 
-function isValid(titulo, imgUrl, questionsQtt, lvlQtt) {
-
-    // if (titulo.length < 20 || titulo.length > 65) {
-    //     alert('Titulo com tamanho invalido');
-    //     return false
-    // }
-    // if(imgUrl.includes('https://') || imgUrl.includes('http://')){
-    //     if(imgUrl.includes('.jpg') || imgUrl.includes('.jpeg') || imgUrl.includes('.png') || imgUrl.includes('.webp')){
-    //     }else{
-    //         alert('insira uma URL válida para sua imagem')
-    //         return false
-    //     }
-    // } else {
-    //     alert('insira uma URL válida para sua imagem')
-    //     return false
-    // }
-    // if (!Number(questionsQtt) || Number(questionsQtt) < 3) {
-    //     alert('Quantidade de perguntas inválida (pelo menos 3)')
-    //     return false
-    // }
-    // if (!Number(lvlQtt) || Number(lvlQtt) < 2) {
-    //     alert('Quantidade de níveis inválida (pelo menos 2)')
-    //     return false
-    // }
-
-    quizzTitle = titulo;
-    quizzImgUrl = imgUrl;
-    quizzQuestionsQtt = questionsQtt;
-    quizzLevelsQtt = lvlQtt;
+function isValid() {
+    if (quizzTitle.length < 20 || quizzTitle.length > 65) {
+        alert('Titulo com tamanho invalido');
+        return false
+    }
+    if (quizzImgUrl.includes('https://') || quizzImgUrl.includes('http://')) {
+        if (quizzImgUrl.includes('.jpg') || quizzImgUrl.includes('.jpeg') || quizzImgUrl.includes('.png') || quizzImgUrl.includes('.webp')) {
+        } else {
+            alert('insira uma URL válida para sua imagem')
+            return false
+        }
+    } else {
+        alert('insira uma URL válida para sua imagem')
+        return false
+    }
+    if (!Number(quizzQuestionsQtt) || Number(quizzQuestionsQtt) < 3) {
+        alert('Quantidade de perguntas inválida (pelo menos 3)')
+        return false
+    }
+    if (!Number(quizzLevelsQtt) || Number(quizzLevelsQtt) < 2) {
+        alert('Quantidade de níveis inválida (pelo menos 2)')
+        return false
+    }
 
 }
 
@@ -448,9 +444,9 @@ function setLvlObj() {
     for (let i = 0; i < quizzLevelsQtt; i++) {
         userQuizz.levels.push({
             title: lvlNodeList[i].querySelector('.lvlTitle').value,
-            image: lvlNodeList[i].querySelector('.lvlPercentage').value,
-            text: lvlNodeList[i].querySelector('.lvlPercentage').value,
-            minValue: lvlNodeList[i].querySelector('.lvlDescription').value
+            image: lvlNodeList[i].querySelector('.lvlImgUrl').value,
+            text: lvlNodeList[i].querySelector('.lvlDescription').value,
+            minValue: lvlNodeList[i].querySelector('.lvlPercentage').value
         })
     }
 }
@@ -506,6 +502,108 @@ function questionsCards(quizzQuestionsQtt) {
     return questionsList;
 }
 function inputValidator(input) {
+
+    //verifica se o titulo tem a quantidade esperada de caracteres e muda seu background de acordo
+    if (input.classList.contains("quizzTitle")) {
+        let warningArea = input.parentElement.querySelector('.warning');
+        if (input.value.length === 0) {
+            warningArea.innerHTML = '';
+            input.classList.remove('invalidInput')
+        } else if (input.value.length < 20 || input.value.length >= 65) {
+            if (input.value.length < 20) {
+                warningArea.innerHTML = `o titulo deve ter pelo menos 20 caracteres (${input.value.length}) `
+            } else if (input.value.length >= 65) {
+                warningArea.innerHTML = `o titulo deve ter no máximo 65 caracteres(${input.value.length})`
+            }
+            input.classList.add('invalidInput')
+        } else if (input.value.length > 20 || input.value.length <= 65) {
+            warningArea.innerHTML = ``
+            input.classList.remove('invalidInput')
+        }
+
+        quizzTitle = input.value;
+    }
+
+    //verifica se a url é válida e muda seu background de acordo
+    if (input.classList.contains("quizzImgUrl")) {
+        let warningArea = input.parentElement.querySelector('.warning');
+        if (input.value.length === 0) {
+            warningArea.innerHTML = ``;
+            input.classList.remove('invalidInput')
+        }
+
+        if (input.value.length > 0) {
+            warningArea.innerHTML = ` O valor informado não é uma URL`
+            input.classList.add('invalidInput')
+        }
+
+        if (input.value.includes('https://') || input.value.includes('http://')) {
+            if (input.value.includes('.jpg') || input.value.includes('.jpeg') || input.value.includes('.png') || input.value.includes('.webp')) {
+                input.classList.remove('invalidInput')
+                warningArea.innerHTML = ``
+            } else {
+                input.classList.add('invalidInput')
+                warningArea.innerHTML = ` O valor informado não é uma URL válida`
+            }
+        }
+        quizzImgUrl = input.value;
+    }
+
+    //verifica se o input é um numero e se é > 3 mudando seu estilo de acordo
+    if (input.classList.contains("quizzQuestionsQtt")) {
+        let warningArea = input.parentElement.querySelector('.warning');
+        let inputNumber = Number(input.value)
+
+        //fail-safe limpa o warningArea sempre e remove a invalidação
+        if (input.value.length !== 0) {
+            warningArea.innerHTML = ``
+            input.classList.remove('invalidInput')
+        }
+
+        if (input.value.length === 0) {
+            warningArea.innerHTML = ``
+            input.classList.remove('invalidInput')
+
+        } else if (isNaN(inputNumber)) {
+            warningArea.innerHTML = `você deve digitar apenas numeros`
+            input.classList.add('invalidInput')
+        } else if (inputNumber < 3) {
+            warningArea.innerHTML = `o quizz deve ter, pelo menos, 3 perguntas`
+            input.classList.add('invalidInput')
+        } else if (inputNumber > 3) {
+            warningArea.innerHTML = ``
+            input.classList.remove('invalidInput')
+
+        }
+        quizzQuestionsQtt = input.value;
+
+    }
+
+    //verifica se o input é um numero e se é > 2 mudando seu estilo de acordo
+    if (input.classList.contains("quizzLevelsQtt")) {
+        let warningArea = input.parentElement.querySelector('.warning');
+        let inputNumber = Number(input.value)
+        //fail-safe limpa o warningArea sempre e remove a invalidação
+        if (input.value.length !== 0) {
+            warningArea.innerHTML = ``
+            input.classList.remove('invalidInput')
+        }
+
+        if (input.value.length === 0) {
+            warningArea.innerHTML = ``;
+            input.classList.remove('invalidInput')
+        } else if (isNaN(inputNumber)) {
+            warningArea.innerHTML = `você deve digitar apenas numeros`
+            input.classList.add('invalidInput')
+        } else if (inputNumber < 2) {
+            warningArea.innerHTML = `o quizz deve ter, pelo menos, 2 niveis`
+            input.classList.add('invalidInput')
+        } else if (inputNumber > 2) {
+            warningArea.innerHTML = ``
+            input.classList.remove('invalidInput')
+        }
+        quizzLevelsQtt = input.value;
+    }
 }
 function showLevel(cardLvl) {
     const clickedCardLvl = cardLvl.parentElement.parentElement;
@@ -531,7 +629,13 @@ function goToHome() {
     window.location.reload()
 }
 function accessQuizz() {
-    console.log(userQuizz)
+    axios
+        .get(url+newUserQuizz.data.id)
+        .then(response => {
+        showQuizz(response)})
+        .catch( () => {
+            alert('falha ao acessar o quizz')
+        })
 }
 
 // Tela Dois 
