@@ -70,6 +70,11 @@ const quizzTeste = {
         }
     ]
 }
+const localQuizzes = [];
+const savedQuizzes = localStorage.getItem('Quizzes');
+let resultado = [];
+const respostas = []
+let data = []
 
 //VARIAVEIS DA TELA 3 5
 let lvlList = '';
@@ -87,21 +92,66 @@ let failedUserQuizz;
 todosQuizzes();
 
 
+function ShowUserQuizz() {
+
+
+    const userQuizzesScreen = document.querySelector('.userQuizz');
+    const userQuizzTitle = document.querySelector('.userQuizzes .titulo')
+    const userQuizzes = local(localQuizzes);
+    if (userQuizzes.length <= 0) {
+        return
+    }
+
+    userQuizzesScreen.classList.add('userQuizzDisplayed');
+    userQuizzesScreen.classList.remove('userQuizz');
+    userQuizzTitle.innerHTML = `Seus Quizzes <ion-icon onclick ="goTocreatQuizz()" class = "addQuizz" name="add-circle"></ion-icon>`
+    userQuizzesScreen.innerHTML = '';
+    for (let i = 0; i < userQuizzes.length; i++) {
+        axios
+            .get(url + userQuizzes[i].id)
+            .then(response => {
+                {
+                    const individualQuizz = response.data
+                    userQuizzesScreen.innerHTML += `
+                <li onclick = openQuizz(this) data-id = '${individualQuizz.id}' >
+                    <img src="${individualQuizz.image}" alt="">
+                    <div class="gradient"><p>${individualQuizz.title}</p></div>
+                </li>
+                `
+
+                }
+            })
+    }
+}
+function local() {
+    const arrLocalArrQuizzes = JSON.parse(savedQuizzes);
+    if (savedQuizzes !== null) {
+        for (let i = 0; i < arrLocalArrQuizzes.length; i++) {
+            localQuizzes.push(arrLocalArrQuizzes[i]);
+        }
+    }
+    return localQuizzes
+}
+
 function todosQuizzes() {
+
+
     const promisse = axios.get(url);
 
     promisse.then((resposta) => {
         container.innerHTML = `
         <div class="telaUm ">
-        <div class="novoQuizz">
-            <p>Você não criou nenhum quizz ainda :(</p>
-            <button onclick = 'goTocreatQuizz()'>Criar Quizz</button>
+        <div class = 'userQuizzes'>
+            <p class="titulo"></p>
+            <ul class="userQuizz">
+                <p>Você não criou nenhum quizz ainda :(</p>
+                <button onclick = 'goTocreatQuizz()'>Criar Quizz</button>
+            </ul>
         </div>
-
         <div class="todosQuizzes">
-            <div class="titulo">
-                <h1>Todos os Quizzes</h1>
-            </div>
+            <p class="titulo">
+                Todos os Quizzes
+            </p>
             <ul class="listaQuizzes">
 
             </ul>
@@ -109,6 +159,7 @@ function todosQuizzes() {
     </div>`
         quizzes = resposta.data;
         quizzesIniciais();
+        ShowUserQuizz();
     })
 
     promisse.catch(() => {
@@ -119,23 +170,50 @@ function todosQuizzes() {
 
 }
 function quizzesIniciais() {
+    const arrLocal = JSON.parse(savedQuizzes);
+    const arrLocalId = []
     const iniciais = document.querySelector('.listaQuizzes');
+    let serverQuizzList = 0;
     iniciais.innerHTML = ''
-
-    for (let i = 0; i < 6; i++) {
-        const boxQuizz = `
-        <li onclick = openQuizz(this) data-id = '${quizzes[i].id}' >
+    if(arrLocal===null){
+        for (let i = 0; serverQuizzList < 6; i++) {
+                const boxQuizz = `
+            <li onclick = openQuizz(this) data-id = '${quizzes[i].id}' class='serverQuizz' >
+                <img src="${quizzes[i].image}" alt="">
+                <div class="gradient"><p>${quizzes[i].title}</p></div>
+                
+            </li>
+            `
+            ; iniciais.innerHTML += boxQuizz
+            
+            serverQuizzList = document.querySelectorAll('.serverQuizz').length;
+        }
+    } else{
+        for(let i = 0; i<arrLocal.length;i++){
+            arrLocalId.push(arrLocal[i].id);
+        }
+    }
+    
+    
+    
+    for (let i = 0; serverQuizzList < 6; i++) {
+        if(arrLocalId.includes(quizzes[i].id)){
+            console.log(true)
+        }else{
+            const boxQuizz = `
+        <li onclick = openQuizz(this) data-id = '${quizzes[i].id}' class='serverQuizz' >
             <img src="${quizzes[i].image}" alt="">
             <div class="gradient"><p>${quizzes[i].title}</p></div>
             
         </li>
-        `;
-        iniciais.innerHTML += boxQuizz
+        `
+        ; iniciais.innerHTML += boxQuizz
+        }
+        serverQuizzList = document.querySelectorAll('.serverQuizz').length;
     }
 }
 const openQuizz = (quizz) => {
     const quizzId = quizz.getAttribute('data-id');
-
     axios
         .get(url + quizzId)
         .then(response => {
@@ -145,13 +223,18 @@ const openQuizz = (quizz) => {
 }
 const showQuizz = receivedQuizz => {
     const quizzData = receivedQuizz.data;
-    container.innerHTML = `<div class="telaDois">
+    resultado = receivedQuizz.data.levels;
+    data = receivedQuizz
+    container.innerHTML = `
+    <div class="telaDois">
     <div class="topo">
         <img src="${quizzData.image}" alt="Imagem Não Encontrada" class="quizzHeader">
         <div></div>
         <div><span>${quizzData.title}</span></div>
     </div>
-    <div class="questionBox">${getQuestionTemplate(quizzData)}</div>`
+    <div class="questionBox">${getQuestionTemplate(quizzData)}</div>
+    <footer class="hidden"></footer>
+    <div class="botoes hidden"></div>`
 }
 
 function getQuestionTemplate(quizzData) {
@@ -165,23 +248,19 @@ function getQuestionTemplate(quizzData) {
             </div>
             <ul class="respostas">${getAnswers(quizzQuestions[i].answers, [i])}</ul>
         </div>`
-}
-
+    }
     return questionsTemplate;
 }
-function getAnswers(quizzAnswers){
-    const sortedAnswers = quizzAnswers.sort(embaralhar)
-    console.log(quizzAnswers)
-    let answersTemplate= '';
-    for(let i = 0; i < quizzAnswers.length; i++){
-        console.log(sortedAnswers[i], i)
-
+function getAnswers(quizzAnswers) {
+    const sortedAnswers = quizzAnswers.sort(embaralhar);
+    let answersTemplate = '';
+    for (let i = 0; i < quizzAnswers.length; i++) {
         answersTemplate += `
             <li onclick="marcar(this)" data-iscorrect = '${sortedAnswers[i].isCorrectAnswer}'>
                 <img src="${sortedAnswers[i].image}" alt="Imagem Não Encontrada">
                 <div class="opcao ${sortedAnswers[i].isCorrectAnswer}">${sortedAnswers[i].text}</div>
-            </li>` 
-        
+            </li>`
+
     }
     return answersTemplate;
 }
@@ -204,7 +283,7 @@ const selectLevel = document.querySelector('.telaTres .selectLevel');
 //TELA 3.4
 const quizzCreated = document.querySelector('.telaTres .quizzCreated');
 
-const userQuizz = { title: '', image: '', questions: [], levels: [] };
+const userQuizz = { title: quizzTitle, image: quizzImgUrl, questions: [], levels: [] };
 
 function goTocreatQuizz() {
     container.innerHTML = `
@@ -212,15 +291,14 @@ function goTocreatQuizz() {
             <div class="basicInfo">
                 <p>Comece pelo começo</p>
                 <div class="inputs">
-                    <input type="text" placeholder="Título do seu quizz" required class="quizzTitle">
-                    <input type="text" placeholder="URL da imagem do seu quizz" required class="quizzImgUrl">
-                    <input type="text" placeholder="Quantidade de perguntas do quizz" required class="quizzQuestionsQtt">
-                    <input type="text" placeholder="Quantidade de níveis do quizz" required class="quizzLevelsQtt">
+                    <input onkeyup="inputValidator(this)" type="text" placeholder="Título do seu quizz" required class="quizzTitle">
+                    <input onkeyup="inputValidator(this)" type="text" placeholder="URL da imagem do seu quizz" required class="quizzImgUrl">
+                    <input onkeyup="inputValidator(this)" type="text" placeholder="Quantidade de perguntas do quizz" required class="quizzQuestionsQtt">
+                    <input onkeyup="inputValidator(this)" type="text" placeholder="Quantidade de níveis do quizz" required class="quizzLevelsQtt">
                 </div>
                 <button onclick = goToCreatQuestions()>Prosseguir pra criar perguntas</button>
             </div>
         </div>`
-
     quizzTitle = document.querySelector('.quizzTitle');
     quizzImgUrl = document.querySelector('.quizzImgUrl');
     quizzQuestionsQtt = document.querySelector('.quizzQuestionsQtt');
@@ -237,10 +315,14 @@ function goToCreatQuestions() {
     container.querySelector('.telaTres').innerHTML = `
     <div class="quizzQuestions">
     <p>Crie suas perguntas</p>
-    <div>${questionsCards(quizzQuestionsQtt)}</div>
+    <div>${questionsCards(quizzQuestionsQtt.value)}</div>
     <button onclick = 'goToCreatLevels()'>Prosseguir pra criar níveis</button>
     </div>
     `
+    quizzTitle = quizzTitle.value;
+    quizzImgUrl = quizzImgUrl.value;
+    quizzQuestionsQtt = quizzQuestionsQtt.value;
+    quizzLevelsQtt = quizzLevelsQtt.value
 }
 
 function goToCreatLevels() {
@@ -249,12 +331,12 @@ function goToCreatLevels() {
     <div class="selectLevel">
     <p>Agora, decida os níveis </ion-icon></p>
     <div class="levels">${levelsCards(quizzLevelsQtt)}</div>
-    <button onclick = 'goToquizzCreated()'>Finalizar Quizz</button>
+    <button onclick = 'goToQuizzCreated()'>Finalizar Quizz</button>
     </div>`
     lvlNodeList = document.querySelectorAll('.level');
 }
 
-function goToquizzCreated() {
+function goToQuizzCreated() {
     setLvlObj();
     container.querySelector('.telaTres').innerHTML = `
     <div class="quizzCreated">
@@ -266,8 +348,26 @@ function goToquizzCreated() {
         <button onclick = 'accessQuizz()'> Acessar Quizz</button>
         <button onclick = 'goToHome()'> Voltar pra home</button>
     </div>`
+
+    sendRequest(quizzTeste);
+}
+function sendRequest(newQuizz) {
+    axios
+        .post(url, newQuizz)
+        .then(response => {
+            localQuizzes.push({
+                key: response.data.key,
+                id: response.data.id
+            })
+            storageQuizzes()
+
+        })
 }
 
+function storageQuizzes() {
+    localQuizzesStorage = JSON.stringify(localQuizzes);
+    localStorage.setItem('Quizzes', localQuizzesStorage)
+}
 function isBlank() {
     if (quizzTitle.value === '' ||
         quizzImgUrl.value === '' ||
@@ -384,27 +484,27 @@ function questionsCards(quizzQuestionsQtt) {
         <div class="question">
         <div class="doQuestion ">
             <p>Pergunta ${i} <ion-icon name="create" onclick="showQuestion(this)"></ion-icon></p>
-            <input type="text" required placeholder="Texto da pergunta" class='questionText' >
-            <input type="text" required placeholder="Cor de fundo da pergunta" class='questionColor'>
+            <input onkeyup="inputValidator(this)" type="text" required placeholder="Texto da pergunta" class='questionText' >
+            <input onkeyup="inputValidator(this)" type="text" required placeholder="Cor de fundo da pergunta" class='questionColor'>
         </div>
         <div class="correctAnswer">
             <p>Resposta correta</p>
-            <input type="text" required placeholder="Resposta correta" class='questionCorrectAnswer'>
-            <input type="text" required placeholder="URL da imagem" class='questionCorrectAnswerImg'>
+            <input onkeyup="inputValidator(this)" type="text" required placeholder="Resposta correta" class='questionCorrectAnswer'>
+            <input onkeyup="inputValidator(this)" type="text" required placeholder="URL da imagem" class='questionCorrectAnswerImg'>
         </div>
         <div class="wrongAnswers">
             <p>Respostas incorretas</p>
             <div class="wrong">
-                <input type="text" required placeholder="Resposta incorreta 1" class = 'wrongOne'>
-                <input type="text" required placeholder="URL da imagem 1" class = 'wrongOneImg'>
+                <input onkeyup="inputValidator(this)" type="text" required placeholder="Resposta incorreta 1" class = 'wrongOne'>
+                <input onkeyup="inputValidator(this)" type="text" required placeholder="URL da imagem 1" class = 'wrongOneImg'>
             </div>
             <div class="wrong">
-                <input type="text" placeholder="Resposta incorreta 2" class = 'wrongTwo'>
-                <input type="text" placeholder="URL da imagem 2" class = 'wrongTwoImg'>
+                <input onkeyup="inputValidator(this)" type="text" placeholder="Resposta incorreta 2" class = 'wrongTwo'>
+                <input onkeyup="inputValidator(this)" type="text" placeholder="URL da imagem 2" class = 'wrongTwoImg'>
             </div>
             <div class="wrong">
-                <input type="text" placeholder="Resposta incorreta 3" class = 'wrongThree'>
-                <input type="text" placeholder="URL da imagem 3" class = 'wrongThreeImg'>
+                <input onkeyup="inputValidator(this)" type="text" placeholder="Resposta incorreta 3" class = 'wrongThree'>
+                <input onkeyup="inputValidator(this)" type="text" placeholder="URL da imagem 3" class = 'wrongThreeImg'>
             </div>
         </div>
     </div>`
@@ -412,7 +512,8 @@ function questionsCards(quizzQuestionsQtt) {
 
     return questionsList;
 }
-
+function inputValidator(input) {
+}
 function showLevel(cardLvl) {
     const clickedCardLvl = cardLvl.parentElement.parentElement;
     const selectedBefore = document.querySelector('.level.openedLvl');
@@ -436,33 +537,69 @@ function showQuestion(cardQuestion) {
 function goToHome() {
     window.location.reload()
 }
-function accessQuizz(){
+function accessQuizz() {
     console.log(userQuizz)
 }
 
 // Tela Dois 
- function ErroExibirQuizz(resposta){
+function ErroExibirQuizz(resposta) {
     alert("O Quizz que você procura não se encontra disponível, selecione outro para continuar com a diversão");
-        window.location.reload(true);
+    window.location.reload(true);
 }
-function embaralhar() { 
-	return Math.random() - 0.5; 
+
+function embaralhar() {
+    return Math.random() - 0.5;
 }
-function marcar(selecionado){
+
+function marcar(selecionado) {
     const Jaselecionada = document.querySelector("ul .marcada");
     const UlJaMarcada = selecionado.parentNode.classList.contains("Ulmarcada");
     const proxima = document.querySelector('.proxima');
-    console.log(proxima);
-    if(Jaselecionada === null && !UlJaMarcada){
+    if (Jaselecionada === null && !UlJaMarcada) {
         selecionado.classList.add("marcado");
         selecionado.parentNode.classList.add("Ulmarcada");
         proxima.classList.remove('proxima');
     }
-    setTimeout(rolar,2000);
-    console.log(selecionado)
+    setTimeout(rolar, 2000);
+    
 }
-function rolar(){
+
+function rolar() {
     const proxima = document.querySelector('.proxima');
-    console.log(proxima)
-    proxima.scrollIntoView({behavior:"smooth"});
+    if (proxima !== null){
+        proxima.scrollIntoView({ behavior: "smooth" });
+    }else{
+        avaliar();
+    }
+}
+
+function avaliar(){
+    const verdadeiro = document.querySelectorAll(".marcado .true");
+    const falso = document.querySelectorAll(".marcado .false");
+    const total = verdadeiro.length + falso.length;
+    const score  = Math.floor((verdadeiro.length/total)*100);
+    CreateFinal(resultado,score);
+}
+
+function CreateFinal(final,pontuacao){
+    const rodape = document.querySelector("footer");
+    const buttons = document.querySelector(".botoes")
+    buttons.classList.remove("hidden")
+    rodape.classList.remove("hidden")
+    console.log(data.data);
+    buttons.innerHTML = `
+    <button onclick = 'accessQuizz()'>Reiniciar Quizz</button>
+    <button onclick = 'goToHome()'> Voltar pra home</button>`
+
+    for (let i=0; i<final.length ; i++){
+        if(pontuacao>=final[i].minValue){
+            rodape.innerHTML = `
+        <div class="resultado">${final[i].title}</div>
+        <div class="conteudo">
+            <img src="${final[1].image}" alt="Imagem não encontrada">
+            <div class="texto">${final[i].text}</div>
+        </div>`;
+        }
+    }
+    document.querySelector("footer").scrollIntoView({ behavior: "smooth" });
 }
