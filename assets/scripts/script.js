@@ -260,7 +260,9 @@ const showQuizz = receivedQuizz => {
     </div>
     <div class="questionBox">${getQuestionTemplate(quizzData)}</div>
     <footer class="hidden"></footer>
-    <div class="botoes hidden"></div>`
+    <div class="botoes hidden"></div>`;
+
+    document.querySelector(".telaDois").scrollIntoView({ behavior: "smooth" })
 }
 
 function getQuestionTemplate(quizzData) {
@@ -694,7 +696,7 @@ function CreateFinal(final,pontuacao){
     rodape.classList.remove("hidden")
     console.log(data.data);
     buttons.innerHTML = `
-    <button onclick = 'accessQuizz()'>Reiniciar Quizz</button>
+    <button onclick = 'RefazerQuizz(${data.data.id})'>Reiniciar Quizz</button>
     <button onclick = 'goToHome()'> Voltar pra home</button>`
 
     for (let i=0; i<final.length ; i++){
@@ -708,4 +710,14 @@ function CreateFinal(final,pontuacao){
         }
     }
     document.querySelector("footer").scrollIntoView({ behavior: "smooth" });
+}
+
+function RefazerQuizz(identificador) {
+    axios
+        .get(url+identificador)
+        .then(response => {
+        showQuizz(response)})
+        .catch( () => {
+            alert('falha ao acessar o quizz')
+        })
 }
