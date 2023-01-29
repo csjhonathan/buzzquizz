@@ -84,7 +84,7 @@ header {
     overflow-x: scroll;
     display: flex;
     height: auto;
-    padding-left: 94%;
+    border-radius: 5px;
 }
 
 .userQuizzDisplayed .gradient {
