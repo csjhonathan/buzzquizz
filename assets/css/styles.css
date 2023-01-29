@@ -320,35 +320,42 @@ header {
     flex-direction: column;
     align-items: center;
 }
-
-.doQuestion,
-.correctAnswer,
-.wrong {
-    gap: 14px
-}
-
-.doQuestion p {
+.doQuestion > p {
     margin-top: 28px;
+    margin-bottom: 30px;
     display: flex;
     justify-content: space-between;
 }
 
+.question.opened .doQuestion > p  {
+    margin-top: 28px;
+    margin-bottom: 12px ;
+}
+.doQuestion div > .warning {
+    height: 14px;
+    margin-bottom: 0;
+    width: 100%;
+}
 .correctAnswer p {
     margin-top: 28px;
-    margin-bottom: 10px;
+    margin-bottom: 24px;
+}
+.correctAnswer  div > .warning {
+    height: 14px;
+    margin: 0px;
 }
 
 .wrongAnswers p {
     margin-top: 28px;
 }
-
-.wrong:nth-child(2) {
-    margin-top: 14px;
+.wrongAnswers div > .warning{
+    margin-top: 0px;
+    margin-bottom: 0px;
+    height: 14px;
 }
-
 .wrong:nth-child(3) {
-    margin-top: 32px;
-    margin-bottom: 32px;
+    margin-top: 18px;
+    margin-bottom: 18px;
 }
 
 .quizzQuestions button {
@@ -376,7 +383,7 @@ header {
     height: 100%;
 }
 
-.selectLevel>p {
+.selectLevel > p {
     font-weight: 700;
     font-size: 20px;
     line-height: 23px;
@@ -397,11 +404,16 @@ header {
     transition: all .5s;
 }
 
-.level input {
+/* .level input {
     margin-bottom: 14px;
+} */
+
+.level div > p{
+    height: 14px;
+    width: 100%;
 }
 
-.level p {
+.level > p {
     margin-bottom: 24px;
     width: 564px;
     font-style: normal;
@@ -505,7 +517,6 @@ ion-icon {
     height: 856px;
     transition: all .9s;
 }
-
 .openedLvl {
     height: 316px;
     transition: all .9s;
@@ -626,14 +637,11 @@ li .opcao {
     scroll-margin-top: 100px;
 }
 .warning {
-    width: 400px;
+    width: 400px ;
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
-    font-size: 16px;
-    line-height: 19px;
-    /* identical to box height */
-
-
-    color: #EC362D;
+    font-size: 14px !important;
+    line-height: 19px !important;
+    color: #EC362D !important;
 }

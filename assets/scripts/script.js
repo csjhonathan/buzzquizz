@@ -113,7 +113,7 @@ function ShowUserQuizz() {
 
     const userQuizzesScreen = document.querySelector('.userQuizz');
     const userQuizzTitle = document.querySelector('.userQuizzes .titulo')
-    const userQuizzes = local(localQuizzes)
+    const userQuizzes = local(localQuizzes);
     const recentUserQuizz = [];
 
     for (let i = userQuizzes.length - 1; i >= 0; i--) {
@@ -132,24 +132,21 @@ function ShowUserQuizz() {
         axios
             .get(url + recentUserQuizz[i].id)
             .then(response => {
-                {
                     const individualQuizz = response.data
                     userQuizzesScreen.innerHTML += `
-                <li onclick = openQuizz(this) data-id = '${individualQuizz.id}' >
+                <li onclick = openQuizz(this) data-id = '${individualQuizz.id} data-key ='${recentUserQuizz[i].key}' >
                     <img src="${individualQuizz.image}" alt="">
                     <div class="gradient"><p>${individualQuizz.title}</p></div>
                 </li>
                 `
-
-                }
             })
     }
 }
 function local() {
-    const arrLocalArrQuizzes = JSON.parse(savedQuizzes);
+    const LocalArrQuizzes = JSON.parse(savedQuizzes);
     if (savedQuizzes !== null) {
-        for (let i = 0; i < arrLocalArrQuizzes.length; i++) {
-            localQuizzes.push(arrLocalArrQuizzes[i]);
+        for (let i = 0; i < LocalArrQuizzes.length; i++) {
+            localQuizzes.push(LocalArrQuizzes[i]);
         }
     }
     return localQuizzes
@@ -290,10 +287,10 @@ function goTocreatQuizz() {
             <div class="basicInfo">
                 <p>Comece pelo começo</p>
                 <div class="inputs">
-                    <div><input onkeyup="inputValidator(this)" type="text" placeholder="Título do seu quizz" required class="quizzTitle"><p class='warning'></p></div>
-                    <div><input onkeyup="inputValidator(this)" type="text" placeholder="URL da imagem do seu quizz" required class="quizzImgUrl"><p class='warning'></p></div>
-                    <div><input onkeyup="inputValidator(this)" type="text" placeholder="Quantidade de perguntas do quizz" required class="quizzQuestionsQtt"><p class='warning'></p></div>
-                    <div><input onkeyup="inputValidator(this)" type="text" placeholder="Quantidade de níveis do quizz" required class="quizzLevelsQtt"><p class='warning'></p></div>
+                    <div><input onkeyup="inputValidatorQuizz(this)" type="text" placeholder="Título do seu quizz" required class="quizzTitle"><p class='warning'></p></div>
+                    <div><input onkeyup="inputValidatorQuizz(this)" type="text" placeholder="URL da imagem do seu quizz" required class="quizzImgUrl"><p class='warning'></p></div>
+                    <div><input onkeyup="inputValidatorQuizz(this)" type="text" placeholder="Quantidade de perguntas do quizz" required class="quizzQuestionsQtt"><p class='warning'></p></div>
+                    <div><input onkeyup="inputValidatorQuizz(this)" type="text" placeholder="Quantidade de níveis do quizz" required class="quizzLevelsQtt"><p class='warning'></p></div>
                 </div>
                 <button onclick = goToCreatQuestions()>Prosseguir pra criar perguntas</button>
             </div>
@@ -457,10 +454,10 @@ function levelsCards(l) {
         lvlList += `
         <div class="level closed">
         <p>Nível ${i} <ion-icon name="create" onclick = showLevel(this)></ion-icon></p>
-        <input type="text" required placeholder="Título do nível" class='lvlTitle'>
-        <input type="text" required placeholder="% de acerto mínima" class='lvlPercentage'>
-        <input type="text" required placeholder="URL da imagem do nível" class='lvlImgUrl'>
-        <input type="text" required placeholder="Descrição do nível" class='lvlDescription'>
+        <div><input onkeyup="inputValidatorLevel(this)" type="text" required placeholder="Título do nível" class='lvlTitle'><p class ="warning"></p></div>
+        <div><input onkeyup="inputValidatorLevel(this)" type="text" required placeholder="% de acerto mínima" class='lvlPercentage'><p class ="warning"></p></div>
+        <div><input onkeyup="inputValidatorLevel(this)" type="text" required placeholder="URL da imagem do nível" class='lvlImgUrl'><p class ="warning"></p></div>
+        <div><input onkeyup="inputValidatorLevel(this)" type="text" required placeholder="Descrição do nível" class='lvlDescription'><p class ="warning"></p></div>
     </div>`
     }
 
@@ -473,27 +470,27 @@ function questionsCards(quizzQuestionsQtt) {
         <div class="question">
         <div class="doQuestion ">
             <p>Pergunta ${i} <ion-icon name="create" onclick="showQuestion(this)"></ion-icon></p>
-            <input onkeyup="inputValidator(this)" type="text" required placeholder="Texto da pergunta" class='questionText' >
-            <input onkeyup="inputValidator(this)" type="text" required placeholder="Cor de fundo da pergunta" class='questionColor'>
+            <div><input onkeyup="inputValidatorQuestion(this)" type="text" required placeholder="Texto da pergunta" class='questionText' ><p class ="warning"></p></div>
+            <div><input onkeyup="inputValidatorQuestion(this)" type="text" required placeholder="Cor de fundo da pergunta" class='questionColor'><p class ="warning"></p></div>            
         </div>
         <div class="correctAnswer">
             <p>Resposta correta</p>
-            <input onkeyup="inputValidator(this)" type="text" required placeholder="Resposta correta" class='questionCorrectAnswer'>
-            <input onkeyup="inputValidator(this)" type="text" required placeholder="URL da imagem" class='questionCorrectAnswerImg'>
+            <div><input onkeyup="inputValidatorQuestion(this)" type="text" required placeholder="Resposta correta" class='questionCorrectAnswer'><p class ="warning"></p></div>
+            <div><input onkeyup="inputValidatorQuestion(this)" type="text" required placeholder="URL da imagem" class='questionCorrectAnswerImg'><p class ="warning"></p></div>
         </div>
         <div class="wrongAnswers">
             <p>Respostas incorretas</p>
             <div class="wrong">
-                <input onkeyup="inputValidator(this)" type="text" required placeholder="Resposta incorreta 1" class = 'wrongOne'>
-                <input onkeyup="inputValidator(this)" type="text" required placeholder="URL da imagem 1" class = 'wrongOneImg'>
+                <div><input onkeyup="inputValidatorQuestion(this)" type="text" required placeholder="Resposta incorreta 1" class = 'wrongOne'><p class ="warning"></p></div>
+                <div><input onkeyup="inputValidatorQuestion(this)" type="text" required placeholder="URL da imagem 1" class = 'wrongOneImg'><p class ="warning"></p></div>
             </div>
             <div class="wrong">
-                <input onkeyup="inputValidator(this)" type="text" placeholder="Resposta incorreta 2" class = 'wrongTwo'>
-                <input onkeyup="inputValidator(this)" type="text" placeholder="URL da imagem 2" class = 'wrongTwoImg'>
+                <div><input onkeyup="inputValidatorQuestion(this)" type="text" placeholder="Resposta incorreta 2" class = 'wrongTwo'><p class ="warning"></p></div>
+                <div><input onkeyup="inputValidatorQuestion(this)" type="text" placeholder="URL da imagem 2" class = 'wrongTwoImg'><p class ="warning"></p></div>
             </div>
             <div class="wrong">
-                <input onkeyup="inputValidator(this)" type="text" placeholder="Resposta incorreta 3" class = 'wrongThree'>
-                <input onkeyup="inputValidator(this)" type="text" placeholder="URL da imagem 3" class = 'wrongThreeImg'>
+                <div><input onkeyup="inputValidatorQuestion(this)" type="text" placeholder="Resposta incorreta 3" class = 'wrongThree'><p class ="warning"></p></div>
+                <div><input onkeyup="inputValidatorQuestion(this)" type="text" placeholder="URL da imagem 3" class = 'wrongThreeImg'><p class ="warning"></p></div>
             </div>
         </div>
     </div>`
@@ -501,8 +498,70 @@ function questionsCards(quizzQuestionsQtt) {
 
     return questionsList;
 }
-function inputValidator(input) {
+function showLevel(cardLvl) {
+    const clickedCardLvl = cardLvl.parentElement.parentElement;
+    const selectedBefore = document.querySelector('.level.openedLvl');
 
+    if (selectedBefore !== null) {
+        selectedBefore.classList.remove('openedLvl');
+    }
+    clickedCardLvl.classList.add('openedLvl');
+}
+
+function showQuestion(cardQuestion) {
+    const clickedCardQuestion = cardQuestion.parentElement.parentElement.parentElement;
+    const selectedBefore = document.querySelector('.question.opened');
+
+    if (selectedBefore !== null) {
+        selectedBefore.classList.remove('opened');
+    }
+    clickedCardQuestion.classList.add('opened');
+}
+
+function goToHome() {
+    window.location.reload()
+}
+function accessQuizz() {
+    axios
+        .get(url + newUserQuizz.data.id)
+        .then(response => {
+            showQuizz(response)
+        })
+        .catch(() => {
+            alert('falha ao acessar o quizz')
+        })
+}
+
+// Tela Dois 
+function ErroExibirQuizz(resposta) {
+    alert("O Quizz que você procura não se encontra disponível, selecione outro para continuar com a diversão");
+    window.location.reload(true);
+}
+
+function embaralhar() {
+    return Math.random() - 0.5;
+}
+
+function marcar(selecionado) {
+    const Jaselecionada = document.querySelector("ul .marcada");
+    const UlJaMarcada = selecionado.parentNode.classList.contains("Ulmarcada");
+    const proxima = document.querySelector('.proxima');
+    if (Jaselecionada === null && !UlJaMarcada) {
+        selecionado.classList.add("marcado");
+        selecionado.parentNode.classList.add("Ulmarcada");
+        proxima.classList.remove('proxima');
+    }
+    setTimeout(rolar, 2000);
+}
+
+function rolar() {
+    const proxima = document.querySelector('.proxima');
+    proxima.scrollIntoView({ behavior: "smooth" });
+}
+//BONUS
+
+//VALIDADORES DE INPUT
+function inputValidatorQuizz(input) {
     //verifica se o titulo tem a quantidade esperada de caracteres e muda seu background de acordo
     if (input.classList.contains("quizzTitle")) {
         let warningArea = input.parentElement.querySelector('.warning');
@@ -604,63 +663,13 @@ function inputValidator(input) {
         }
         quizzLevelsQtt = input.value;
     }
-}
-function showLevel(cardLvl) {
-    const clickedCardLvl = cardLvl.parentElement.parentElement;
-    const selectedBefore = document.querySelector('.level.openedLvl');
-
-    if (selectedBefore !== null) {
-        selectedBefore.classList.remove('openedLvl');
+}//FEITO
+function inputValidatorQuestion(input) {
+    if(input.classList.contains('questionText')){
+        console.log('eu sou o titulo da pergunta')
     }
-    clickedCardLvl.classList.add('openedLvl');
+    console.log(input)
 }
-
-function showQuestion(cardQuestion) {
-    const clickedCardQuestion = cardQuestion.parentElement.parentElement.parentElement;
-    const selectedBefore = document.querySelector('.question.opened');
-
-    if (selectedBefore !== null) {
-        selectedBefore.classList.remove('opened');
-    }
-    clickedCardQuestion.classList.add('opened');
-}
-
-function goToHome() {
-    window.location.reload()
-}
-function accessQuizz() {
-    axios
-        .get(url+newUserQuizz.data.id)
-        .then(response => {
-        showQuizz(response)})
-        .catch( () => {
-            alert('falha ao acessar o quizz')
-        })
-}
-
-// Tela Dois 
-function ErroExibirQuizz(resposta) {
-    alert("O Quizz que você procura não se encontra disponível, selecione outro para continuar com a diversão");
-    window.location.reload(true);
-}
-
-function embaralhar() {
-    return Math.random() - 0.5;
-}
-
-function marcar(selecionado) {
-    const Jaselecionada = document.querySelector("ul .marcada");
-    const UlJaMarcada = selecionado.parentNode.classList.contains("Ulmarcada");
-    const proxima = document.querySelector('.proxima');
-    if (Jaselecionada === null && !UlJaMarcada) {
-        selecionado.classList.add("marcado");
-        selecionado.parentNode.classList.add("Ulmarcada");
-        proxima.classList.remove('proxima');
-    }
-    setTimeout(rolar, 2000);
-}
-
-function rolar() {
-    const proxima = document.querySelector('.proxima');
-    proxima.scrollIntoView({ behavior: "smooth" });
+function inputValidatorLevel(input) {
+    console.log(input)
 }
