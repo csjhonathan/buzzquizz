@@ -548,11 +548,9 @@ function ErroExibirQuizz(resposta) {
     alert("O Quizz que você procura não se encontra disponível, selecione outro para continuar com a diversão");
     window.location.reload(true);
 }
-
 function embaralhar() {
     return Math.random() - 0.5;
 }
-
 function marcar(selecionado) {
     const Jaselecionada = document.querySelector("ul .marcada");
     const UlJaMarcada = selecionado.parentNode.classList.contains("Ulmarcada");
@@ -563,11 +561,54 @@ function marcar(selecionado) {
         proxima.classList.remove('proxima');
     }
     setTimeout(rolar, 2000);
+    
 }
-
 function rolar() {
     const proxima = document.querySelector('.proxima');
-    proxima.scrollIntoView({ behavior: "smooth" });
+    if (proxima !== null){
+        proxima.scrollIntoView({ behavior: "smooth" });
+    }else{
+        avaliar();
+    }
+}
+function avaliar(){
+    const verdadeiro = document.querySelectorAll(".marcado .true");
+    const falso = document.querySelectorAll(".marcado .false");
+    const total = verdadeiro.length + falso.length;
+    const score  = Math.floor((verdadeiro.length/total)*100);
+    CreateFinal(resultado,score);
+}
+function CreateFinal(final,pontuacao){
+    const rodape = document.querySelector("footer");
+    const buttons = document.querySelector(".botoes")
+    buttons.classList.remove("hidden")
+    rodape.classList.remove("hidden")
+    console.log(data.data);
+    buttons.innerHTML = `
+    <button onclick = 'RefazerQuizz(${data.data.id})'>Reiniciar Quizz</button>
+    <button onclick = 'goToHome()'> Voltar pra home</button>`
+
+    for (let i=0; i<final.length ; i++){
+        if(pontuacao>=final[i].minValue){
+            rodape.innerHTML = `
+        <div class="resultado">${final[i].title}</div>
+        <div class="conteudo">
+            <img src="${final[1].image}" alt="Imagem não encontrada">
+            <div class="texto">${final[i].text}</div>
+        </div>`;
+        }
+    }
+    document.querySelector("footer").scrollIntoView({ behavior: "smooth" });
+}
+
+function RefazerQuizz(identificador) {
+    axios
+        .get(url+identificador)
+        .then(response => {
+        showQuizz(response)})
+        .catch( () => {
+            alert('falha ao acessar o quizz')
+        })
 }
 //BONUS
 
@@ -681,53 +722,8 @@ function inputValidatorQuestion(input) {
     }
     console.log(input)
 }
-
-function showQuestion(cardQuestion) {
-    const clickedCardQuestion = cardQuestion.parentElement.parentElement.parentElement;
-    const selectedBefore = document.querySelector('.question.opened');
-
-    if (selectedBefore !== null) {
-        selectedBefore.classList.remove('opened');
-    }
-    clickedCardQuestion.classList.add('opened');
+function inputValidatorLevel(input) {
 }
 
-function goToHome() {
-    window.location.reload()
-}
-function accessQuizz() {
-    axios
-        .get(url+newUserQuizz.data.id)
-        .then(response => {
-        showQuizz(response)})
-        .catch( () => {
-            alert('falha ao acessar o quizz')
-        })
-}
 
-// Tela Dois 
-function ErroExibirQuizz(resposta) {
-    alert("O Quizz que você procura não se encontra disponível, selecione outro para continuar com a diversão");
-    window.location.reload(true);
-}
 
-function embaralhar() {
-    return Math.random() - 0.5;
-}
-
-function marcar(selecionado) {
-    const Jaselecionada = document.querySelector("ul .marcada");
-    const UlJaMarcada = selecionado.parentNode.classList.contains("Ulmarcada");
-    const proxima = document.querySelector('.proxima');
-    if (Jaselecionada === null && !UlJaMarcada) {
-        selecionado.classList.add("marcado");
-        selecionado.parentNode.classList.add("Ulmarcada");
-        proxima.classList.remove('proxima');
-    }
-    setTimeout(rolar, 2000);
-}
-
-function rolar() {
-    const proxima = document.querySelector('.proxima');
-    proxima.scrollIntoView({ behavior: "smooth" });
-}
