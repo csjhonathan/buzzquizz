@@ -73,6 +73,11 @@ const quizzTeste = {
 
 const localQuizzes = [];
 const savedQuizzes = localStorage.getItem('Quizzes');
+let resultado = [];
+const respostas = []
+let data = []
+
+//VARIAVEIS DA TELA 3 5
 let newUserQuizz;
 //VARIAVEIS DA TELA 3
 let lvlList = '';
@@ -134,7 +139,7 @@ function ShowUserQuizz() {
             .then(response => {
                     const individualQuizz = response.data
                     userQuizzesScreen.innerHTML += `
-                <li onclick = openQuizz(this) data-id = '${individualQuizz.id} data-key ='${recentUserQuizz[i].key}' >
+                <li onclick = 'openQuizz(this)' data-id = '${individualQuizz.id}' data-key ='${recentUserQuizz[i].key}' >
                     <img src="${individualQuizz.image}" alt="">
                     <div class="gradient"><p>${individualQuizz.title}</p></div>
                 </li>
@@ -241,6 +246,8 @@ const openQuizz = (quizz) => {
 }
 const showQuizz = receivedQuizz => {
     const quizzData = receivedQuizz.data;
+    resultado = receivedQuizz.data.levels;
+    data = receivedQuizz
     container.innerHTML = `
     <div class="telaDois">
     <div class="topo">
@@ -248,7 +255,11 @@ const showQuizz = receivedQuizz => {
         <div></div>
         <div><span>${quizzData.title}</span></div>
     </div>
-    <div class="questionBox">${getQuestionTemplate(quizzData)}</div>`
+    <div class="questionBox">${getQuestionTemplate(quizzData)}</div>
+    <footer class="hidden"></footer>
+    <div class="botoes hidden"></div>`;
+
+    document.querySelector(".telaDois").scrollIntoView({ behavior: "smooth" })
 }
 
 function getQuestionTemplate(quizzData) {
@@ -258,7 +269,7 @@ function getQuestionTemplate(quizzData) {
         questionsTemplate += `
         <div class="perguntas proxima">
             <div class="pergunta" style = "background-color: ${quizzQuestions[i].color}">
-                ${quizzQuestions[i].title}
+                <h1>${quizzQuestions[i].title}</h1>
             </div>
             <ul class="respostas">${getAnswers(quizzQuestions[i].answers, [i])}</ul>
         </div>`
@@ -670,6 +681,53 @@ function inputValidatorQuestion(input) {
     }
     console.log(input)
 }
-function inputValidatorLevel(input) {
-    console.log(input)
+
+function showQuestion(cardQuestion) {
+    const clickedCardQuestion = cardQuestion.parentElement.parentElement.parentElement;
+    const selectedBefore = document.querySelector('.question.opened');
+
+    if (selectedBefore !== null) {
+        selectedBefore.classList.remove('opened');
+    }
+    clickedCardQuestion.classList.add('opened');
+}
+
+function goToHome() {
+    window.location.reload()
+}
+function accessQuizz() {
+    axios
+        .get(url+newUserQuizz.data.id)
+        .then(response => {
+        showQuizz(response)})
+        .catch( () => {
+            alert('falha ao acessar o quizz')
+        })
+}
+
+// Tela Dois 
+function ErroExibirQuizz(resposta) {
+    alert("O Quizz que você procura não se encontra disponível, selecione outro para continuar com a diversão");
+    window.location.reload(true);
+}
+
+function embaralhar() {
+    return Math.random() - 0.5;
+}
+
+function marcar(selecionado) {
+    const Jaselecionada = document.querySelector("ul .marcada");
+    const UlJaMarcada = selecionado.parentNode.classList.contains("Ulmarcada");
+    const proxima = document.querySelector('.proxima');
+    if (Jaselecionada === null && !UlJaMarcada) {
+        selecionado.classList.add("marcado");
+        selecionado.parentNode.classList.add("Ulmarcada");
+        proxima.classList.remove('proxima');
+    }
+    setTimeout(rolar, 2000);
+}
+
+function rolar() {
+    const proxima = document.querySelector('.proxima');
+    proxima.scrollIntoView({ behavior: "smooth" });
 }
