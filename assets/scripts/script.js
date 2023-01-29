@@ -270,7 +270,7 @@ function getQuestionTemplate(quizzData) {
         questionsTemplate += `
         <div class="perguntas proxima">
             <div class="pergunta" style = "background-color: ${quizzQuestions[i].color}">
-                ${quizzQuestions[i].title}
+                <h1>${quizzQuestions[i].title}</h1>
             </div>
             <ul class="respostas">${getAnswers(quizzQuestions[i].answers, [i])}</ul>
         </div>`
@@ -639,10 +639,11 @@ function goToHome() {
 }
 function accessQuizz() {
     axios
-        .get(url+newUserQuizz.data.id)
+        .get(url + newUserQuizz.data.id)
         .then(response => {
-        showQuizz(response)})
-        .catch( () => {
+            showQuizz(response)
+        })
+        .catch(() => {
             alert('falha ao acessar o quizz')
         })
 }
@@ -667,27 +668,27 @@ function marcar(selecionado) {
         proxima.classList.remove('proxima');
     }
     setTimeout(rolar, 2000);
-    
+
 }
 
 function rolar() {
     const proxima = document.querySelector('.proxima');
-    if (proxima !== null){
+    if (proxima !== null) {
         proxima.scrollIntoView({ behavior: "smooth" });
-    }else{
+    } else {
         avaliar();
     }
 }
 
-function avaliar(){
+function avaliar() {
     const verdadeiro = document.querySelectorAll(".marcado .true");
     const falso = document.querySelectorAll(".marcado .false");
     const total = verdadeiro.length + falso.length;
-    const score  = Math.floor((verdadeiro.length/total)*100);
-    CreateFinal(resultado,score);
+    const score = Math.floor((verdadeiro.length / total) * 100);
+    CreateFinal(resultado, score);
 }
 
-function CreateFinal(final,pontuacao){
+function CreateFinal(final, pontuacao) {
     const rodape = document.querySelector("footer");
     const buttons = document.querySelector(".botoes")
     buttons.classList.remove("hidden")
@@ -697,8 +698,8 @@ function CreateFinal(final,pontuacao){
     <button onclick = 'accessQuizz()'>Reiniciar Quizz</button>
     <button onclick = 'goToHome()'> Voltar pra home</button>`
 
-    for (let i=0; i<final.length ; i++){
-        if(pontuacao>=final[i].minValue){
+    for (let i = 0; i < final.length; i++) {
+        if (pontuacao >= final[i].minValue) {
             rodape.innerHTML = `
         <div class="resultado">${final[i].title}</div>
         <div class="conteudo">

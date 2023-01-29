@@ -2,14 +2,11 @@
 
     .container {
         width: 96%;
-        display: flex;
-        justify-content: center;
-        margin: 100px 2%;
+        margin: 80px 2%;
     }
 
-    .novoQuizz {
+    .userQuizz {
         margin-bottom: 35px;
-
     }
 
     .listaQuizzes {
@@ -29,6 +26,14 @@
     .telaTres .inputs {
         width: 100%;
         margin-top: 20px;
+    }
+
+    .telaTres .inputs div {
+        width: 341px;
+    }
+
+    .telaTres .inputs div input {
+        width: 100%;
     }
 
     .basicInfo button {
@@ -65,7 +70,7 @@
         width: 300px;
     }
 
-    .telaTres .inputs input,
+
     .telaTres .questionText,
     .telaTres .questionColor,
     .telaTres .questionCorrectAnswer,
@@ -80,6 +85,48 @@
     .level .lvlPercentage,
     .level .lvlImgUrl,
     .level .lvlDescription {
-        width: 90%
+        width: 90%;
+    }
+
+    .quizzCreated {
+        width: 300px;
+    }
+
+    .quizzCreated .photo {
+        width: 340px;
+    }
+
+    .quizzCreated .photo img {
+        width: 340px;
+    }
+
+    .quizzCreated .photo p {
+        word-break: break-all;
+        font-size: 19px;
+    }
+
+    .userQuizzDisplayed {
+        justify-content: center;
+    }
+
+    .topo span {
+        font-size: 19px;
+        width: 90%;
+        word-break: break-all;
+    }
+
+    .perguntas {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .pergunta {
+        width: 340px;
+    }
+
+    .pergunta h1 {
+        font-size: 19px;
+        word-break: break-all;
     }
 }
