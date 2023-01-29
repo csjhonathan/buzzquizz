@@ -84,6 +84,7 @@ header {
     overflow-x: scroll;
     display: flex;
     height: auto;
+    padding-left: 94%;
 }
 
 .userQuizzDisplayed .gradient {
@@ -632,101 +633,98 @@ li .opcao {
 
 .proxima {
     scroll-margin-top: 100px;
+    scroll-margin-top: 75px;
+}
 
-    .proxima {
-        scroll-margin-top: 75px;
-    }
+.resultado {
 
-    .resultado {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-weight: 23px;
+    line-height: 27px;
+    color: #FFFFFF;
+    background-color: #EC362D;
+}
 
-        .resultado {
-            width: 100%;
-            height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-weight: 23px;
-            line-height: 27px;
-            color: #FFFFFF;
-            background-color: #EC362D;
-        }
+footer {
+    width: 760px;
+    height: auto;
+    background-color: #FFFFFF;
+    box-shadow: 0px 0px 10px 0px #0000000D;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 45px;
+    padding: 20px;
+    scroll-margin-top: 60px;
+}
 
-        footer {
-            width: 760px;
-            height: auto;
-            background-color: #FFFFFF;
-            box-shadow: 0px 0px 10px 0px #0000000D;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 45px;
-            padding: 20px;
-            scroll-margin-top: 60px;
-        }
+footer img {
+    width: 365px;
+    height: 275px;
+    object-fit: fill;
+}
 
-        footer img {
-            width: 365px;
-            height: 275px;
-            object-fit: fill;
-        }
+.conteudo div {
+    width: 330px;
+    height: auto;
+    word-break: break-word;
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 25px;
+}
 
-        .conteudo div {
-            width: 330px;
-            height: auto;
-            word-break: break-word;
-            font-weight: 700;
-            font-size: 19px;
-            line-height: 25px;
-        }
+.conteudo {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
 
-        .conteudo {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
+.botoes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
 
-        .botoes {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+.botoes button:nth-child(2n - 1) {
+    margin-top: 45px;
+    margin-bottom: 9px;
+    width: 221px;
+    height: 44px;
+    background-color: #EC362D;
+    border-radius: 15px;
+    border: none;
+    font-weight: 400;
+    font-size: 21px;
+    line-height: 25px;
+    color: #FFF5F4;
+}
 
-        .botoes button:nth-child(2n - 1) {
-            margin-top: 45px;
-            margin-bottom: 9px;
-            width: 221px;
-            height: 44px;
-            background-color: #EC362D;
-            border-radius: 15px;
-            border: none;
-            font-weight: 400;
-            font-size: 21px;
-            line-height: 25px;
-            color: #FFF5F4;
-        }
+.botoes button:nth-child(2n - 2) {
+    width: 221px;
+    height: 44px;
+    background-color: transparent;
+    border-radius: 15px;
+    border: none;
+    font-weight: 400;
+    font-size: 21px;
+    line-height: 25px;
+    color: #818181;
+}
 
-        .botoes button:nth-child(2n - 2) {
-            width: 221px;
-            height: 44px;
-            background-color: transparent;
-            border-radius: 15px;
-            border: none;
-            font-weight: 400;
-            font-size: 21px;
-            line-height: 25px;
-            color: #818181;
-        }
-
-        .warning {
-            width: 400px;
-            font-family: 'Roboto';
-            font-style: normal;
-            font-weight: 400;
-            font-size: 16px;
-            line-height: 19px;
-            /* identical to box height */
-            color: #EC362D;
-        }
+.warning {
+    width: 400px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    /* identical to box height */
+    color: #EC362D;
+}
