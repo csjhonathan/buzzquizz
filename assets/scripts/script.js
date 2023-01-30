@@ -2,82 +2,13 @@ const url = 'https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/';
 const container = document.querySelector('.container');
 const newQuizz = container.querySelector('.novoQuizz');
 const allQuizzes = container.querySelector('.todosQuizzes');
-const quizzTeste = {
-    title: "SEGUNDATESTETESTETEJSTETESTETESTE",
-    image: "https://http.cat/411.jpg",
-    questions: [
-        {
-            title: "Título da pergunta 1",
-            color: "#123456",
-            answers: [
-                {
-                    text: "Texto da resposta 1",
-                    image: "https://http.cat/411.jpg",
-                    isCorrectAnswer: true
-                },
-                {
-                    text: "Texto da resposta 2",
-                    image: "https://http.cat/412.jpg",
-                    isCorrectAnswer: false
-                }
-            ]
-        },
-        {
-            title: "Título da pergunta 2",
-            color: "#123456",
-            answers: [
-                {
-                    text: "Texto da resposta 1",
-                    image: "https://http.cat/411.jpg",
-                    isCorrectAnswer: true
-                },
-                {
-                    text: "Texto da resposta 2",
-                    image: "https://http.cat/412.jpg",
-                    isCorrectAnswer: false
-                }
-            ]
-        },
-        {
-            title: "Título da pergunta 3",
-            color: "#123456",
-            answers: [
-                {
-                    text: "Texto da resposta 1",
-                    image: "https://http.cat/411.jpg",
-                    isCorrectAnswer: true
-                },
-                {
-                    text: "Texto da resposta 2",
-                    image: "https://http.cat/412.jpg",
-                    isCorrectAnswer: false
-                }
-            ]
-        }
-    ],
-    levels: [
-        {
-            title: "Título do nível 1",
-            image: "https://http.cat/411.jpg",
-            text: "Descrição do nível 1",
-            minValue: 0
-        },
-        {
-            title: "Título do nível 2",
-            image: "https://http.cat/412.jpg",
-            text: "Descrição do nível 2",
-            minValue: 50
-        }
-    ]
-}
 const localQuizzes = Object.keys(localStorage).reverse();
 let resultado = [];
 const respostas = []
 let data = []
 
-//VARIAVEIS DA TELA 3 5
-let newUserQuizz;
 //VARIAVEIS DA TELA 3
+let newUserQuizz;
 let lvlList = '';
 let lvlNodeList;
 let quizzes = [];
@@ -140,7 +71,7 @@ function ShowUserQuizz() {
     }
 }
 function todosQuizzes() {
-
+    container.innerHTML = '<img src="./assets/img/loading.gif" alt="">'
 
     const promisse = axios.get(url);
 
@@ -198,6 +129,7 @@ function quizzesIniciais() {
     }
 }
 const openQuizz = (quizz) => {
+    container.innerHTML = '<img src="./assets/img/loading.gif" alt="">'
     const quizzId = quizz.getAttribute('data-id');
     axios
         .get(url + quizzId)
@@ -318,25 +250,28 @@ function goToQuizzCreated() {
     setLvlObj();
     sendRequest(userQuizz);
 }
-function sendRequest(newQuizz) {
+function sendRequest() {
+    container.querySelector('.telaTres').innerHTML = '<img src="./assets/img/loading.gif" alt="">'
     axios
-        .post(url, newQuizz)
+        .post(url, userQuizz)
         .then(response => {
             localStorage.setItem(response.data.id, response.data.key)
+            container.innerHTML = 
             container.querySelector('.telaTres').innerHTML = `
     <div class="quizzCreated">
         <p>Seu quizz está pronto!</p>
         <div class="photo">
-            <img src="${newQuizz.image}" alt="">
-            <p>${newQuizz.title}</p>
+            <img src="${userQuizz.image}" alt="">
+            <p>${userQuizz.title}</p>
         </div>
         <button onclick = 'accessQuizz()'> Acessar Quizz</button>
         <button onclick = 'goToHome()'> Voltar pra home</button>
     </div>`
             newUserQuizz = response;
         })
-        .catch(() => {
-            alert('erro ao enviar o quizz')
+        .catch(resposta => {
+            console.log(resposta)
+            alert('erro ao enviar o quizz, a página será recarregada')
         })
 
 
@@ -503,6 +438,7 @@ function goToHome() {
     window.location.reload()
 }
 function accessQuizz() {
+    container.innerHTML = '<img src="./assets/img/loading.gif" alt="">'
     axios
         .get(url + newUserQuizz.data.id)
         .then(response => {
@@ -728,7 +664,7 @@ function RefazerQuizz(identificador) {
             alert('falha ao acessar o quizz')
         })
 }
-//BONUS
+//BONUS 
 
 //VALIDADORES DE INPUT
 function inputValidatorQuizz(input) {
@@ -838,7 +774,6 @@ function inputValidatorQuestion(input) {
 
     if (input.classList.contains("questionText")) {
         let warningArea = input.parentElement.querySelector('.warning');
-        console.log(warningArea)
         if (input.value.length === 0) {
             warningArea.innerHTML = 'campo obrigatório';
             input.classList.remove('invalidInput')
@@ -858,7 +793,6 @@ function inputValidatorQuestion(input) {
             return
         }
         if (!input.value.startsWith("#") || (input.value.length < 4 || input.value.length > 7)) {
-            console.log('caiu aqui')
             warningArea.innerHTML = `formato de cor inválido `
             input.classList.add('invalidInput')
         }
@@ -870,7 +804,6 @@ function inputValidatorQuestion(input) {
 
     if (input.classList.contains("questionCorrectAnswer")) {
         let warningArea = input.parentElement.querySelector('.warning');
-        console.log(warningArea)
         if (input.value.length === 0) {
             warningArea.innerHTML = 'campo obrigatório';
             input.classList.remove('invalidInput')
@@ -930,7 +863,7 @@ function inputValidatorQuestion(input) {
         let warningArea = input.parentElement.querySelector('.warning');
         
         if ((input.classList.contains("wrongTwoImg") || input.classList.contains("wrongThreeImg")) && (input.value.length === 0 || input.value === '' )) {
-            console.log('estou em branco')
+
             warningArea.innerHTML = '';
             input.classList.remove('invalidInput')
             return
