@@ -710,7 +710,6 @@ function checkLevelsIsValid(levelsNodeList) {
         alert('Pelo menos um nivel deve ter taxa de acerto igual a 0')
         return false
     }
-        console.log(setLevelsComparasion)
     // http://.jpg
 }
 // Tela Dois 
@@ -753,7 +752,6 @@ function CreateFinal(final, pontuacao) {
     const buttons = document.querySelector(".botoes")
     buttons.classList.remove("hidden")
     rodape.classList.remove("hidden")
-    console.log(data.data);
     buttons.innerHTML = `
     <button onclick = 'RefazerQuizz(${data.data.id})'>Reiniciar Quizz</button>
     <button onclick = 'goToHome()'> Voltar pra home</button>`
