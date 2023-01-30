@@ -3,7 +3,7 @@ const container = document.querySelector('.container');
 const newQuizz = container.querySelector('.novoQuizz');
 const allQuizzes = container.querySelector('.todosQuizzes');
 const quizzTeste = {
-    title: "SABADOTESTETESTETEJSTETESTETESTE",
+    title: "SEGUNDATESTETESTETEJSTETESTETESTE",
     image: "https://http.cat/411.jpg",
     questions: [
         {
@@ -70,9 +70,7 @@ const quizzTeste = {
         }
     ]
 }
-
-const localQuizzes = [];
-const savedQuizzes = localStorage.getItem('Quizzes');
+const localQuizzes = Object.keys(localStorage).reverse();
 let resultado = [];
 const respostas = []
 let data = []
@@ -118,14 +116,8 @@ function ShowUserQuizz() {
 
     const userQuizzesScreen = document.querySelector('.userQuizz');
     const userQuizzTitle = document.querySelector('.userQuizzes .titulo')
-    const userQuizzes = local(localQuizzes);
-    const recentUserQuizz = [];
 
-    for (let i = userQuizzes.length - 1; i >= 0; i--) {
-        recentUserQuizz.push(userQuizzes[i])
-    }
-
-    if (userQuizzes.length <= 0) {
+    if (localQuizzes.length <= 0) {
         return
     }
 
@@ -133,13 +125,13 @@ function ShowUserQuizz() {
     userQuizzesScreen.classList.remove('userQuizz');
     userQuizzTitle.innerHTML = `Seus Quizzes <ion-icon onclick ="goTocreatQuizz()" class = "addQuizz" name="add-circle"></ion-icon>`
     userQuizzesScreen.innerHTML = '';
-    for (let i = 0; i < recentUserQuizz.length; i++) {
+    for (let i = 0; i < localQuizzes.length; i++) {
         axios
-            .get(url + recentUserQuizz[i].id)
+            .get(url + localQuizzes[i])
             .then(response => {
                 const individualQuizz = response.data
                 userQuizzesScreen.innerHTML += `
-                <li onclick = 'openQuizz(this)' data-id = '${individualQuizz.id}' data-key ='${recentUserQuizz[i].key}' >
+                <li onclick = 'openQuizz(this)' data-id = '${individualQuizz.id}' data-key ='${localStorage.getItem(localQuizzes[i])}' >
                     <img src="${individualQuizz.image}" alt="">
                     <div class="gradient"><p>${individualQuizz.title}</p></div>
                 </li>
@@ -147,16 +139,6 @@ function ShowUserQuizz() {
             })
     }
 }
-function local() {
-    const LocalArrQuizzes = JSON.parse(savedQuizzes);
-    if (savedQuizzes !== null) {
-        for (let i = 0; i < LocalArrQuizzes.length; i++) {
-            localQuizzes.push(LocalArrQuizzes[i]);
-        }
-    }
-    return localQuizzes
-}
-
 function todosQuizzes() {
 
 
@@ -194,45 +176,25 @@ function todosQuizzes() {
 
 }
 function quizzesIniciais() {
-    const arrLocal = JSON.parse(savedQuizzes);
-    const arrLocalId = []
     const iniciais = document.querySelector('.listaQuizzes');
     let serverQuizzList = 0;
     iniciais.innerHTML = ''
-    if (arrLocal === null) {
+    if (localQuizzes !== null) {
         for (let i = 0; serverQuizzList < 6; i++) {
-            const boxQuizz = `
+            if (localQuizzes.includes(quizzes[i].id.toString())) {
+            } else {
+                const boxQuizz = `
             <li onclick = openQuizz(this) data-id = '${quizzes[i].id}' class='serverQuizz' >
                 <img src="${quizzes[i].image}" alt="">
                 <div class="gradient"><p>${quizzes[i].title}</p></div>
                 
             </li>
             `
-                ; iniciais.innerHTML += boxQuizz
+                    ; iniciais.innerHTML += boxQuizz
+                serverQuizzList = document.querySelectorAll('.serverQuizz').length;
 
-            serverQuizzList = document.querySelectorAll('.serverQuizz').length;
+            }
         }
-    } else {
-        for (let i = 0; i < arrLocal.length; i++) {
-            arrLocalId.push(arrLocal[i].id);
-        }
-    }
-
-
-
-    for (let i = 0; serverQuizzList < 6; i++) {
-        if (arrLocalId.includes(quizzes[i].id)) {
-        } else {
-            const boxQuizz = `
-        <li onclick = openQuizz(this) data-id = '${quizzes[i].id}' class='serverQuizz' >
-            <img src="${quizzes[i].image}" alt="">
-            <div class="gradient"><p>${quizzes[i].title}</p></div>
-            
-        </li>
-        `
-                ; iniciais.innerHTML += boxQuizz
-        }
-        serverQuizzList = document.querySelectorAll('.serverQuizz').length;
     }
 }
 const openQuizz = (quizz) => {
@@ -360,11 +322,7 @@ function sendRequest(newQuizz) {
     axios
         .post(url, newQuizz)
         .then(response => {
-            localQuizzes.push({
-                key: response.data.key,
-                id: response.data.id
-            })
-            storageQuizzes()
+            localStorage.setItem(response.data.id, response.data.key)
             container.querySelector('.telaTres').innerHTML = `
     <div class="quizzCreated">
         <p>Seu quizz está pronto!</p>
@@ -377,16 +335,11 @@ function sendRequest(newQuizz) {
     </div>`
             newUserQuizz = response;
         })
-        .catch(response => {
+        .catch(() => {
             alert('erro ao enviar o quizz')
         })
 
 
-}
-
-function storageQuizzes() {
-    localQuizzesStorage = JSON.stringify(localQuizzes);
-    localStorage.setItem('Quizzes', localQuizzesStorage)
 }
 function isBlank() {
     if (quizzTitle === undefined ||
@@ -706,7 +659,7 @@ function checkLevelsIsValid(levelsNodeList) {
         }
     }
 
-    if (comparador!==0){
+    if (comparador !== 0) {
         alert('Pelo menos um nivel deve ter taxa de acerto igual a 0')
         return false
     }
@@ -886,10 +839,128 @@ function inputValidatorQuizz(input) {
     }
 }//FEITO
 function inputValidatorQuestion(input) {
-    // if (input.classList.contains('questionText')) {
-    //     console.log('eu sou o titulo da pergunta')
-    // }
-    // console.log(input)
+
+    if (input.classList.contains("questionText")) {
+        let warningArea = input.parentElement.querySelector('.warning');
+        console.log(warningArea)
+        if (input.value.length === 0) {
+            warningArea.innerHTML = 'campo obrigatório';
+            input.classList.remove('invalidInput')
+        } else if (input.value.length < 10) {
+            warningArea.innerHTML = `o titulo deve ter pelo menos 10 caracteres (${input.value.length}) `
+            input.classList.add('invalidInput')
+        } else if (input.value.length > 10) {
+            warningArea.innerHTML = ``
+            input.classList.remove('invalidInput')
+        }
+    }
+    if (input.classList.contains("questionColor")) {
+        let warningArea = input.parentElement.querySelector('.warning');
+        if (input.value.length === 0 || input.value === '') {
+            warningArea.innerHTML = 'campo obrigatório';
+            input.classList.remove('invalidInput')
+            return
+        }
+        if (!input.value.startsWith("#") || (input.value.length < 4 || input.value.length > 7)) {
+            console.log('caiu aqui')
+            warningArea.innerHTML = `formato de cor inválido `
+            input.classList.add('invalidInput')
+        }
+        if (input.value.startsWith("#") && (input.value.length >= 4 && input.value.length <= 7)) {
+            warningArea.innerHTML = ``
+            input.classList.remove('invalidInput')
+        }
+    }
+
+    if (input.classList.contains("questionCorrectAnswer")) {
+        let warningArea = input.parentElement.querySelector('.warning');
+        console.log(warningArea)
+        if (input.value.length === 0) {
+            warningArea.innerHTML = 'campo obrigatório';
+            input.classList.remove('invalidInput')
+        } else if (input.value.length < 10) {
+            warningArea.innerHTML = `o titulo deve ter pelo menos 10 caracteres (${input.value.length}) `
+            input.classList.add('invalidInput')
+        } else if (input.value.length > 10) {
+            warningArea.innerHTML = ``
+            input.classList.remove('invalidInput')
+        }
+    }
+    if (input.classList.contains("questionCorrectAnswerImg")) {
+        let warningArea = input.parentElement.querySelector('.warning');
+        if (input.value.length === 0) {
+            warningArea.innerHTML = 'campo obrigatório';
+            input.classList.remove('invalidInput')
+        }
+
+        if (input.value.length > 0) {
+            warningArea.innerHTML = ` O valor informado não é uma URL`
+            input.classList.add('invalidInput')
+        }
+
+        if (input.value.includes('https://') || input.value.includes('http://')) {
+            if (input.value.includes('.jpg') || input.value.includes('.jpeg') || input.value.includes('.png') || input.value.includes('.webp')) {
+                input.classList.remove('invalidInput')
+                warningArea.innerHTML = ``
+            } else {
+                input.classList.add('invalidInput')
+                warningArea.innerHTML = ` O valor informado não é uma URL válida`
+            }
+        }
+    }
+
+
+    if (input.classList.contains("wrongOne") || input.classList.contains("wrongTwo") || input.classList.contains("wrongThree")) {
+        let warningArea = input.parentElement.querySelector('.warning');
+        
+        if ((input.classList.contains("wrongTwo") || input.classList.contains("wrongThree")) && (input.value.length === 0 || input.value === '' )) {
+            warningArea.innerHTML = '';
+            input.classList.remove('invalidInput')
+            return
+        }
+
+        if (input.value.length === 0) {
+            warningArea.innerHTML = 'campo obrigatório';
+            input.classList.remove('invalidInput')
+        } else if (input.value.length < 10) {
+            warningArea.innerHTML = `o titulo deve ter pelo menos 10 caracteres (${input.value.length}) `
+            input.classList.add('invalidInput')
+        } else if (input.value.length > 10) {
+            warningArea.innerHTML = ``
+            input.classList.remove('invalidInput')
+        }
+    }
+    if (input.classList.contains("wrongOneImg") || input.classList.contains("wrongTwoImg") || input.classList.contains("wrongThreeImg")) {
+        let warningArea = input.parentElement.querySelector('.warning');
+        
+        if ((input.classList.contains("wrongTwoImg") || input.classList.contains("wrongThreeImg")) && (input.value.length === 0 || input.value === '' )) {
+            console.log('estou em branco')
+            warningArea.innerHTML = '';
+            input.classList.remove('invalidInput')
+            return
+        }
+        
+        if (input.value.length === 0 || input.value === '') {
+            warningArea.innerHTML = 'campo obrigatório';
+            input.classList.remove('invalidInput')
+            return
+        }
+
+        if (input.value.length > 0) {
+            warningArea.innerHTML = ` O valor informado não é uma URL`
+            input.classList.add('invalidInput')
+        }
+
+        if (input.value.includes('https://') || input.value.includes('http://')) {
+            if (input.value.includes('.jpg') || input.value.includes('.jpeg') || input.value.includes('.png') || input.value.includes('.webp')) {
+                input.classList.remove('invalidInput')
+                warningArea.innerHTML = ``
+            } else {
+                input.classList.add('invalidInput')
+                warningArea.innerHTML = ` O valor informado não é uma URL válida`
+            }
+        }
+    }
 }
 function inputValidatorLevel(input) {
 }
