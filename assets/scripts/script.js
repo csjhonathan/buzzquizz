@@ -137,8 +137,8 @@ function ShowUserQuizz() {
         axios
             .get(url + recentUserQuizz[i].id)
             .then(response => {
-                    const individualQuizz = response.data
-                    userQuizzesScreen.innerHTML += `
+                const individualQuizz = response.data
+                userQuizzesScreen.innerHTML += `
                 <li onclick = 'openQuizz(this)' data-id = '${individualQuizz.id}' data-key ='${recentUserQuizz[i].key}' >
                     <img src="${individualQuizz.image}" alt="">
                     <div class="gradient"><p>${individualQuizz.title}</p></div>
@@ -325,6 +325,15 @@ function goToCreatQuestions() {
 }
 
 function goToCreatLevels() {
+    const questionsNodeList = document.querySelectorAll('.question');
+    if (checkQuestionsIsBlank(questionsNodeList) === false) {
+        return
+    }
+
+    if (checkQuestionsIsValid(questionsNodeList) === false) {
+        return
+    }
+
     creatQuizzObj();
     container.querySelector('.telaTres').innerHTML = `
     <div class="selectLevel">
@@ -336,6 +345,14 @@ function goToCreatLevels() {
 }
 
 function goToQuizzCreated() {
+    const levelsNodeList = document.querySelectorAll('.level');
+    if (checkLevelsIsBlank(levelsNodeList) === false) {
+        return
+    }
+
+    if (checkLevelsIsValid(levelsNodeList) === false) {
+        return
+    }
     setLvlObj();
     sendRequest(userQuizz);
 }
@@ -466,7 +483,7 @@ function levelsCards(l) {
         <div class="level closed">
         <p>Nível ${i} <ion-icon name="create" onclick = showLevel(this)></ion-icon></p>
         <div><input onkeyup="inputValidatorLevel(this)" type="text" required placeholder="Título do nível" class='lvlTitle'><p class ="warning"></p></div>
-        <div><input onkeyup="inputValidatorLevel(this)" type="text" required placeholder="% de acerto mínima" class='lvlPercentage'><p class ="warning"></p></div>
+        <div><input onkeyup="inputValidatorLevel(this)" type="text" required placeholder="% de acerto mínima(apenas numeros)" class='lvlPercentage'><p class ="warning"></p></div>
         <div><input onkeyup="inputValidatorLevel(this)" type="text" required placeholder="URL da imagem do nível" class='lvlImgUrl'><p class ="warning"></p></div>
         <div><input onkeyup="inputValidatorLevel(this)" type="text" required placeholder="Descrição do nível" class='lvlDescription'><p class ="warning"></p></div>
     </div>`
@@ -481,19 +498,19 @@ function questionsCards(quizzQuestionsQtt) {
         <div class="question">
         <div class="doQuestion ">
             <p>Pergunta ${i} <ion-icon name="create" onclick="showQuestion(this)"></ion-icon></p>
-            <div><input onkeyup="inputValidatorQuestion(this)" type="text" required placeholder="Texto da pergunta" class='questionText' ><p class ="warning"></p></div>
-            <div><input onkeyup="inputValidatorQuestion(this)" type="text" required placeholder="Cor de fundo da pergunta" class='questionColor'><p class ="warning"></p></div>            
+            <div><input onkeyup="inputValidatorQuestion(this)" type="text" required placeholder="Texto da pergunta" class='questionText' ><p class ="warning">campo obrigatório</p></div>
+            <div><input onkeyup="inputValidatorQuestion(this)" type="text" required placeholder="Cor de fundo da pergunta" class='questionColor'><p class ="warning">campo obrigatório</p></div>            
         </div>
         <div class="correctAnswer">
             <p>Resposta correta</p>
-            <div><input onkeyup="inputValidatorQuestion(this)" type="text" required placeholder="Resposta correta" class='questionCorrectAnswer'><p class ="warning"></p></div>
-            <div><input onkeyup="inputValidatorQuestion(this)" type="text" required placeholder="URL da imagem" class='questionCorrectAnswerImg'><p class ="warning"></p></div>
+            <div><input onkeyup="inputValidatorQuestion(this)" type="text" required placeholder="Resposta correta" class='questionCorrectAnswer'><p class ="warning">campo obrigatório</p></div>
+            <div><input onkeyup="inputValidatorQuestion(this)" type="text" required placeholder="URL da imagem" class='questionCorrectAnswerImg'><p class ="warning">campo obrigatório</p></div>
         </div>
         <div class="wrongAnswers">
             <p>Respostas incorretas</p>
             <div class="wrong">
-                <div><input onkeyup="inputValidatorQuestion(this)" type="text" required placeholder="Resposta incorreta 1" class = 'wrongOne'><p class ="warning"></p></div>
-                <div><input onkeyup="inputValidatorQuestion(this)" type="text" required placeholder="URL da imagem 1" class = 'wrongOneImg'><p class ="warning"></p></div>
+                <div><input onkeyup="inputValidatorQuestion(this)" type="text" required placeholder="Resposta incorreta 1" class = 'wrongOne'><p class ="warning">campo obrigatório</p></div>
+                <div><input onkeyup="inputValidatorQuestion(this)" type="text" required placeholder="URL da imagem 1" class = 'wrongOneImg'><p class ="warning">campo obrigatório</p></div>
             </div>
             <div class="wrong">
                 <div><input onkeyup="inputValidatorQuestion(this)" type="text" placeholder="Resposta incorreta 2" class = 'wrongTwo'><p class ="warning"></p></div>
@@ -542,7 +559,160 @@ function accessQuizz() {
             alert('falha ao acessar o quizz')
         })
 }
+function checkQuestionsIsBlank(questionsNodeList) {
+    for (let i = 0; i < questionsNodeList.length; i++) {
+        const questionTitle = questionsNodeList[i].querySelector('.questionText').value;
+        const questionColor = questionsNodeList[i].querySelector('.questionColor').value;
+        const questionCorrectAnswer = questionsNodeList[i].querySelector('.questionCorrectAnswer').value;
+        const questionCorrectAnswerImg = questionsNodeList[i].querySelector('.questionCorrectAnswerImg').value;
+        const wrongOne = questionsNodeList[i].querySelector('.wrongOne').value;
+        const wrongOneImg = questionsNodeList[i].querySelector('.wrongOneImg').value;
+        // const wrongTwo = questionsNodeList[i].querySelector('.wrongTwo').value;
+        // const wrongTwoImg = questionsNodeList[i].querySelector('.wrongTwoImg').value;
+        // const wrongThree = questionsNodeList[i].querySelector('.wrongThree').value;
+        // const wrongThreeImg = questionsNodeList[i].querySelector('.wrongThreeImg').value;
+        if (questionTitle === ''
+            || questionColor === ''
+            || questionCorrectAnswer === ''
+            || questionCorrectAnswerImg === ''
+            || wrongOne === ''
+            || wrongOneImg === '') {
+            alert('Preencha todos os campos obrigatórios')
+            return false
+        }
+    }
+}
 
+function checkQuestionsIsValid(questionsNodeList) {
+
+    for (let i = 0; i < questionsNodeList.length; i++) {
+        const questionTitle = questionsNodeList[i].querySelector('.questionText').value;
+        const questionColor = questionsNodeList[i].querySelector('.questionColor').value;
+        const questionCorrectAnswerImg = questionsNodeList[i].querySelector('.questionCorrectAnswerImg').value;
+        const wrongOneImg = questionsNodeList[i].querySelector('.wrongOneImg').value;
+        const wrongTwo = questionsNodeList[i].querySelector('.wrongTwo').value;
+        const wrongTwoImg = questionsNodeList[i].querySelector('.wrongTwoImg').value;
+        const wrongThree = questionsNodeList[i].querySelector('.wrongThree').value;
+        const wrongThreeImg = questionsNodeList[i].querySelector('.wrongThreeImg').value;
+        if (questionTitle.length < 20) {
+            alert(`seu titulo da pergunta ${i + 1} é pequeno`)
+            return false
+        }
+
+        if ((questionColor.length < 4 || questionColor.length > 7) && !questionColor.includes("#")) {
+            alert(`sua cor da pergunta ${i + 1} está no formato incorreto`)
+            return false
+        }
+
+        if (questionCorrectAnswerImg.includes('https://') || questionCorrectAnswerImg.includes('http://')) {
+            if (!questionCorrectAnswerImg.includes('.jpg') && !questionCorrectAnswerImg.includes('.jpeg') && !questionCorrectAnswerImg.includes('.png') && !questionCorrectAnswerImg.includes('.webp')) {
+                alert(`A URL INFORMADA NA RESPOSTA CORRETA DA PERGUNTA ${i + 1} NÃO É UMA IMAGEM`)
+                return false
+            }
+        } else {
+            alert(`A URL INFORMADA NA RESPOSTA CORRETA DA PERGUNTA ${i + 1} NÃO É VÁLIDA`)
+            return false
+        }
+
+        if (wrongOneImg.includes('https://') || wrongOneImg.includes('http://')) {
+            if (!wrongOneImg.includes('.jpg') && !wrongOneImg.includes('.jpeg') && !wrongOneImg.includes('.png') && !wrongOneImg.includes('.webp')) {
+                alert(`A URL INFORMADA NA RESPOSTA INCORRETA(1) DA PERGUNTA ${i + 1} NÃO É UMA IMAGEM`)
+                return false
+            }
+        } else {
+            alert(`A URL INFORMADA NA RESPOSTA INCORRETA(1) DA PERGUNTA ${i + 1} NÃO É VÁLIDA`)
+            return false
+        }
+
+        if (wrongTwo !== '') {
+            if (wrongTwoImg.includes('https://') || wrongTwoImg.includes('http://')) {
+                if (!wrongTwoImg.includes('.jpg') && !wrongTwoImg.includes('.jpeg') && !wrongTwoImg.includes('.png') && !wrongTwoImg.includes('.webp')) {
+                    alert(`A URL INFORMADA NA RESPOSTA INCORRETA(2) DA PERGUNTA ${i + 1} NÃO É UMA IMAGEM`)
+                    return false
+                }
+            } else {
+                alert(`A URL INFORMADA NA RESPOSTA INCORRETA(2) DA PERGUNTA ${i + 1} NÃO É VÁLIDA`)
+                return false
+            }
+        }
+        if (wrongThree !== '') {
+            if (wrongThreeImg.includes('https://') || wrongThreeImg.includes('http://')) {
+                if (!wrongThreeImg.includes('.jpg') && !wrongThreeImg.includes('.jpeg') && !wrongThreeImg.includes('.png') && !wrongThreeImg.includes('.webp')) {
+                    alert(`A URL INFORMADA NA RESPOSTA INCORRETA(3) DA PERGUNTA ${i + 1} NÃO É UMA IMAGEM`)
+                    return false
+                }
+            } else {
+                alert(`A URL INFORMADA NA RESPOSTA INCORRETA(3) DA PERGUNTA ${i + 1} NÃO É VÁLIDA`)
+                return false
+            }
+        }
+    }
+    // http://.jpg
+}
+function checkLevelsIsBlank(levelsNodeList) {
+    for (let i = 0; i < levelsNodeList.length; i++) {
+        const lvlTitle = levelsNodeList[i].querySelector('.lvlTitle').value;
+        const lvlPercentage = levelsNodeList[i].querySelector('.lvlPercentage').value;
+        const lvlImgUrl = levelsNodeList[i].querySelector('.lvlImgUrl').value;
+        const lvlDescription = levelsNodeList[i].querySelector('.lvlDescription').value;
+        if (lvlTitle === ''
+            || lvlPercentage === ''
+            || lvlImgUrl === ''
+            || lvlDescription === '') {
+            alert('Preencha todos os campos')
+            return false
+        }
+    }
+}
+
+function checkLevelsIsValid(levelsNodeList) {
+    const setLevelsComparasion = [];
+    let comparador = '';
+    for (let i = 0; i < levelsNodeList.length; i++) {
+        const lvlTitle = levelsNodeList[i].querySelector('.lvlTitle').value;
+        const lvlPercentage = levelsNodeList[i].querySelector('.lvlPercentage').value;
+        const lvlImgUrl = levelsNodeList[i].querySelector('.lvlImgUrl').value;
+        const lvlDescription = levelsNodeList[i].querySelector('.lvlDescription').value;
+
+        if (lvlTitle.length < 10) {
+            alert(`seu titulo do nível ${i + 1} é pequeno`)
+            return false
+        }
+
+        if (Number(lvlPercentage) < 0 || Number(lvlPercentage) > 100) {
+            alert(`a porcentagem de acerto do nivel ${i + 1} deve estar entre 0 e 100`)
+            return false
+        }
+
+        if (lvlImgUrl.includes('https://') || lvlImgUrl.includes('http://')) {
+            if (!lvlImgUrl.includes('.jpg') && !lvlImgUrl.includes('.jpeg') && !lvlImgUrl.includes('.png') && !lvlImgUrl.includes('.webp')) {
+                alert(`A URL INFORMADA NO NÍVEL ${i + 1} NÃO É UMA IMAGEM`)
+                return false
+            }
+        } else {
+            alert(`A URL INFORMADA NO NÍVEL ${i + 1} NÃO É VÁLIDA`)
+            return false
+        }
+
+        if (lvlDescription.length < 30) {
+            alert(`sua descrição do nível ${i + 1} é pequena`)
+            return false
+        }
+        setLevelsComparasion.push(Number(lvlPercentage))
+    }
+    for (let i = 0; i < setLevelsComparasion.length; i++) {
+        if (comparador === '' && setLevelsComparasion[i] === 0) {
+            comparador = Number(setLevelsComparasion[i]);
+        }
+    }
+
+    if (comparador!==0){
+        alert('Pelo menos um nivel deve ter taxa de acerto igual a 0')
+        return false
+    }
+        console.log(setLevelsComparasion)
+    // http://.jpg
+}
 // Tela Dois 
 function ErroExibirQuizz(resposta) {
     alert("O Quizz que você procura não se encontra disponível, selecione outro para continuar com a diversão");
@@ -561,24 +731,24 @@ function marcar(selecionado) {
         proxima.classList.remove('proxima');
     }
     setTimeout(rolar, 2000);
-    
+
 }
 function rolar() {
     const proxima = document.querySelector('.proxima');
-    if (proxima !== null){
+    if (proxima !== null) {
         proxima.scrollIntoView({ behavior: "smooth" });
-    }else{
+    } else {
         avaliar();
     }
 }
-function avaliar(){
+function avaliar() {
     const verdadeiro = document.querySelectorAll(".marcado .true");
     const falso = document.querySelectorAll(".marcado .false");
     const total = verdadeiro.length + falso.length;
-    const score  = Math.floor((verdadeiro.length/total)*100);
-    CreateFinal(resultado,score);
+    const score = Math.floor((verdadeiro.length / total) * 100);
+    CreateFinal(resultado, score);
 }
-function CreateFinal(final,pontuacao){
+function CreateFinal(final, pontuacao) {
     const rodape = document.querySelector("footer");
     const buttons = document.querySelector(".botoes")
     buttons.classList.remove("hidden")
@@ -588,8 +758,8 @@ function CreateFinal(final,pontuacao){
     <button onclick = 'RefazerQuizz(${data.data.id})'>Reiniciar Quizz</button>
     <button onclick = 'goToHome()'> Voltar pra home</button>`
 
-    for (let i=0; i<final.length ; i++){
-        if(pontuacao>=final[i].minValue){
+    for (let i = 0; i < final.length; i++) {
+        if (pontuacao >= final[i].minValue) {
             rodape.innerHTML = `
         <div class="resultado">${final[i].title}</div>
         <div class="conteudo">
@@ -603,10 +773,11 @@ function CreateFinal(final,pontuacao){
 
 function RefazerQuizz(identificador) {
     axios
-        .get(url+identificador)
+        .get(url + identificador)
         .then(response => {
-        showQuizz(response)})
-        .catch( () => {
+            showQuizz(response)
+        })
+        .catch(() => {
             alert('falha ao acessar o quizz')
         })
 }
@@ -717,10 +888,10 @@ function inputValidatorQuizz(input) {
     }
 }//FEITO
 function inputValidatorQuestion(input) {
-    if(input.classList.contains('questionText')){
-        console.log('eu sou o titulo da pergunta')
-    }
-    console.log(input)
+    // if (input.classList.contains('questionText')) {
+    //     console.log('eu sou o titulo da pergunta')
+    // }
+    // console.log(input)
 }
 function inputValidatorLevel(input) {
 }

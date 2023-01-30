@@ -741,4 +741,6 @@ footer img {
     font-size: 14px !important;
     line-height: 19px !important;
     color: #EC362D !important;
+    display: flex;
+    align-items: center;
 }
