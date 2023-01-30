@@ -520,10 +520,6 @@ function checkQuestionsIsBlank(questionsNodeList) {
         const questionCorrectAnswerImg = questionsNodeList[i].querySelector('.questionCorrectAnswerImg').value;
         const wrongOne = questionsNodeList[i].querySelector('.wrongOne').value;
         const wrongOneImg = questionsNodeList[i].querySelector('.wrongOneImg').value;
-        // const wrongTwo = questionsNodeList[i].querySelector('.wrongTwo').value;
-        // const wrongTwoImg = questionsNodeList[i].querySelector('.wrongTwoImg').value;
-        // const wrongThree = questionsNodeList[i].querySelector('.wrongThree').value;
-        // const wrongThreeImg = questionsNodeList[i].querySelector('.wrongThreeImg').value;
         if (questionTitle === ''
             || questionColor === ''
             || questionCorrectAnswer === ''
@@ -846,10 +842,10 @@ function inputValidatorQuestion(input) {
         if (input.value.length === 0) {
             warningArea.innerHTML = 'campo obrigatório';
             input.classList.remove('invalidInput')
-        } else if (input.value.length < 10) {
-            warningArea.innerHTML = `o titulo deve ter pelo menos 10 caracteres (${input.value.length}) `
+        } else if (input.value.length <= 20) {
+            warningArea.innerHTML = `o titulo deve ter pelo menos 20 caracteres (${input.value.length}) `
             input.classList.add('invalidInput')
-        } else if (input.value.length > 10) {
+        } else if (input.value.length > 20) {
             warningArea.innerHTML = ``
             input.classList.remove('invalidInput')
         }
@@ -961,9 +957,91 @@ function inputValidatorQuestion(input) {
             }
         }
     }
-}
+}//FEITO
 function inputValidatorLevel(input) {
-}
+    if (input.classList.contains("lvlTitle")) {
+        let warningArea = input.parentElement.querySelector('.warning');
+        if (input.value.length === 0) {
+            warningArea.innerHTML = 'campo obrigatório';
+            input.classList.remove('invalidInput')
+            return
+        } else if (input.value.length <= 10) {
+            warningArea.innerHTML = `o titulo deve ter pelo menos 10 caracteres (${input.value.length}) `
+            input.classList.add('invalidInput')
+        } else if (input.value.length > 10) {
+            warningArea.innerHTML = ``
+            input.classList.remove('invalidInput')
+        }
+    }
+    if (input.classList.contains("lvlImgUrl")) {
+        let warningArea = input.parentElement.querySelector('.warning');
+        if (input.value.length === 0) {
+            warningArea.innerHTML = 'campo obrigatório';
+            input.classList.remove('invalidInput')
+            return
+        }
+
+        if (input.value.length > 0) {
+            warningArea.innerHTML = ` O valor informado não é uma URL`
+            input.classList.add('invalidInput')
+        }
+
+        if (input.value.includes('https://') || input.value.includes('http://')) {
+            if (input.value.includes('.jpg') || input.value.includes('.jpeg') || input.value.includes('.png') || input.value.includes('.webp')) {
+                input.classList.remove('invalidInput')
+                warningArea.innerHTML = ``
+            } else {
+                input.classList.add('invalidInput')
+                warningArea.innerHTML = ` O valor informado não é uma URL válida`
+            }
+        }
+    }
+    if (input.classList.contains("lvlDescription")) {
+        let warningArea = input.parentElement.querySelector('.warning');
+        if (input.value.length === 0) {
+            warningArea.innerHTML = 'campo obrigatório';
+            input.classList.remove('invalidInput')
+            return
+        } else if (input.value.length < 30) {
+            warningArea.innerHTML = `o titulo deve ter pelo menos 30 caracteres (${input.value.length}) `
+            input.classList.add('invalidInput')
+        } else if (input.value.length > 30) {
+            warningArea.innerHTML = ``
+            input.classList.remove('invalidInput')
+        }
+    }
+    if (input.classList.contains("lvlPercentage")) {
+        let warningArea = input.parentElement.querySelector('.warning');
+        let inputNumber = Number(input.value)
+
+        //fail-safe limpa o warningArea sempre e remove a invalidação
+        if (input.value.length === 0) {
+            warningArea.innerHTML = `campo obrigatório`
+            input.classList.remove('invalidInput')
+            return
+        }
+
+        if (input.value < 0 || input.value > 100 ) {
+            warningArea.innerHTML = `digite um numero entre 0-100`
+            input.classList.remove('invalidInput')
+            return
+        }
+
+        if (input.value.length === 0) {
+            warningArea.innerHTML = ``
+            input.classList.remove('invalidInput')
+
+        } else if (isNaN(inputNumber)) {
+            warningArea.innerHTML = `você deve digitar apenas numeros`
+            input.classList.add('invalidInput')
+        } else if (input.value >= 0 || input.value <= 100) {
+            warningArea.innerHTML = ``
+            input.classList.remove('invalidInput')
+            return
+        } 
+
+    }
+}//FEITO 
 
 
 
