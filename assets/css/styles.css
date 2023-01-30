@@ -38,10 +38,12 @@ header {
     display: flex;
     justify-content: center;
 }
+
 .telaUm {
     max-width: 1080px;
     margin-top: 50px;
 }
+
 .userQuizz {
     width: 100%;
     height: 181px;
@@ -334,27 +336,31 @@ header {
     flex-direction: column;
     align-items: center;
 }
-.doQuestion > p {
+
+.doQuestion>p {
     margin-top: 28px;
     margin-bottom: 30px;
     display: flex;
     justify-content: space-between;
 }
 
-.question.opened .doQuestion > p  {
+.question.opened .doQuestion>p {
     margin-top: 28px;
-    margin-bottom: 12px ;
+    margin-bottom: 12px;
 }
-.doQuestion div > .warning {
+
+.doQuestion div>.warning {
     height: 14px;
     margin-bottom: 0;
     width: 100%;
 }
+
 .correctAnswer p {
     margin-top: 28px;
     margin-bottom: 24px;
 }
-.correctAnswer  div > .warning {
+
+.correctAnswer div>.warning {
     height: 14px;
     margin: 0px;
 }
@@ -362,11 +368,13 @@ header {
 .wrongAnswers p {
     margin-top: 28px;
 }
-.wrongAnswers div > .warning{
+
+.wrongAnswers div>.warning {
     margin-top: 0px;
     margin-bottom: 0px;
     height: 14px;
 }
+
 .wrong:nth-child(3) {
     margin-top: 18px;
     margin-bottom: 18px;
@@ -397,7 +405,7 @@ header {
     height: 100%;
 }
 
-.selectLevel > p {
+.selectLevel>p {
     font-weight: 700;
     font-size: 20px;
     line-height: 23px;
@@ -422,12 +430,12 @@ header {
     margin-bottom: 14px;
 } */
 
-.level div > p{
+.level div>p {
     height: 14px;
     width: 100%;
 }
 
-.level > p {
+.level>p {
     margin-bottom: 24px;
     width: 564px;
     font-style: normal;
@@ -530,6 +538,7 @@ ion-icon {
     height: 856px;
     transition: all .9s;
 }
+
 .openedLvl {
     height: 316px;
     transition: all .9s;
@@ -666,7 +675,7 @@ li .opcao {
 }
 
 footer {
-    width: 760px;
+    max-width: 760px;
     height: auto;
     background-color: #FFFFFF;
     box-shadow: 0px 0px 10px 0px #0000000D;
@@ -702,9 +711,8 @@ footer img {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .botoes button:nth-child(2n - 1) {
@@ -734,7 +742,7 @@ footer img {
 }
 
 .warning {
-    width: 400px ;
+    width: 400px;
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
